@@ -524,86 +524,6 @@
 
         function updateSalesList() {
             const tbody = document.getElementById('salesList');
-            if (sales.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: #8b5cf6;">
-                            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i>
-                            <p style="font-size: 1.1rem;">لا توجد مبيعات مسجلة بعد</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            tbody.innerHTML = sales.slice().reverse().map(sale => `
-                <tr>
-                    <td>${sale.date}</td>
-                    <td>${sale.product}</td>
-                    <td>${sale.customer}</td>
-                    <td>${sale.quantity}</td>
-                    <td>${sale.price.toFixed(2)} ر.س</td>
-                    <td><strong>${sale.total.toFixed(2)} ر.س</strong></td>
-                    <td>
-                        <button class="delete-btn" onclick="deleteSale(${sale.id})">
-                            <i class="fas fa-trash-alt"></i>
-                            <span>حذف</span>
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function deleteSale(id) {
-            if (confirm('هل أنت متأكد من حذف هذه العملية؟')) {
-                sales = sales.filter(sale => sale.id !== id);
-                updateDashboard();
-            }
-        }
-
-        updateDashboard();
-    </script>
-</body>
-</html>edCustomers[0];
-            const topProductPercentage = (topProduct[1] / totalRevenue * 100).toFixed(1);
-
-            let recommendations = `
-                <div class="recommendation-item">
-                    <h4>🏆 المنتج الأكثر مبيعاً</h4>
-                    <p><strong>${topProduct[0]}</strong> يشكل ${topProductPercentage}% من إيراداتك (${topProduct[1].toFixed(2)} ر.س). يُنصح بتخصيص 40-50% من رأس المال لهذه الفئة.</p>
-                </div>
-                <div class="recommendation-item">
-                    <h4>👥 الفئة الأكثر شراءً</h4>
-                    <p><strong>${topCustomer[0]}</strong> يمثلون ${(topCustomer[1] / sales.length * 100).toFixed(1)}% من عملائك. ركز على منتجات تناسب هذه الفئة.</p>
-                </div>
-            `;
-
-            if (sortedProducts.length > 1) {
-                const secondProduct = sortedProducts[1];
-                const secondPercentage = (secondProduct[1] / totalRevenue * 100).toFixed(1);
-                recommendations += `
-                    <div class="recommendation-item">
-                        <h4>📈 فرصة نمو</h4>
-                        <p><strong>${secondProduct[0]}</strong> يشكل ${secondPercentage}% من المبيعات. خصص 25-30% من رأس المال لتنمية هذا القطاع.</p>
-                    </div>
-                `;
-            }
-
-            const lowPerformingProducts = sortedProducts.filter(([_, value]) => (value / totalRevenue) < 0.1);
-            if (lowPerformingProducts.length > 0) {
-                recommendations += `
-                    <div class="recommendation-item">
-                        <h4>⚠️ منتجات تحتاج مراجعة</h4>
-                        <p>${lowPerformingProducts.map(p => p[0]).join('، ')} - تشكل أقل من 10% من المبيعات. قد تحتاج لإعادة تقييم المخزون.</p>
-                    </div>
-                `;
-            }
-
-            document.getElementById('recommendations').innerHTML = recommendations;
-        }
-
-        function updateSalesList() {
-            const tbody = document.getElementById('salesList');
             tbody.innerHTML = sales.slice().reverse().map(sale => `
                 <tr>
                     <td>${sale.date}</td>
