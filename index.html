@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام إدارة المبيعات المتكامل</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    .sidebar {
+      transition: transform 0.3s ease;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        z-index: 40;
+        height: 100%;
+        transform: translateX(100%);
+      }
+      
+      .sidebar.open {
+        transform: translateX(0);
+      }
+    }
+    
+    .btn {
+      transition: all 0.2s;
+    }
+    
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .card {
+      transition: all 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+    
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #10b981;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      animation: slideDown 0.3s ease-out;
+      max-width: 90%;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+    
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90%;
+      overflow-y: auto;
+      animation: slideUp 0.3s;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .quick-action {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .quick-action:hover {
+      transform: scale(1.05);
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      ring: 2px;
+      ring-color: #667eea;
+    }
+    
+    .search-input {
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat right 12px center;
+      background-size: 20px;
+      padding-right: 40px;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .badge-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .badge-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .badge-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    @media (max-width: 640px) {
+      .mobile-stack {
+        display: block !important;
+      }
+      
+      .mobile-stack > * {
+        width: 100% !important;
+        margin-bottom: 0.5rem;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full w-full">
+  <div class="h-full w-full flex overflow-hidden" style="background: #f3f4f6;"><!-- Sidebar -->
+   <aside id="sidebar" class="sidebar w-64 bg-white shadow-lg">
+    <div class="p-6 border-b">
+     <h1 id="store-name" class="text-2xl font-bold text-gray-800">متجر الأمل</h1>
+     <p id="store-phone" class="text-sm text-gray-600 mt-1">+964 XXX XXX XXXX</p>
+    </div>
+    <nav class="p-4"><button onclick="navigateTo('home')" class="nav-item w-full text-right px-4 py-3 rounded-lg mb-2 flex items-center gap-3 hover:bg-gray-100"> <span class="text-2xl">🏠</span> <span class="font-semibold">الرئيسية</span> </button> <button onclick="navigateTo('quick-sale')" class="nav-item w-full text-right px-4 py-3 rounded-lg mb-2 flex items-center gap-3 hover:bg-gray-100"> <span class="text-2xl">⚡</span> <span class="font-semibold">بيع سريع</span> </button> <button onclick="navigateTo('products')" class="nav-item w-full text-right px-4 py-3 rounded-lg mb-2 flex items-center gap-3 hover:bg-gray-100"> <span class="text-2xl">📦</span> <span class="font-semibold">المنتجات</span> </button> <button onclick="navigateTo('inventory')" class="nav-item w-full text-right px-4 py-3 rounded-lg mb-2 flex items-center gap-3 hover:bg-gray-100"> <span class="text-2xl">📊</span> <span class="font-semibold">إدارة المخزون</span> </button> <button onclick="navigateTo('customers')" class="nav-item w-full text-right px-4 py-3 rounded-lg mb-2 flex items-center gap-3 hover:bg-gray-100"> <span class="text-2xl">👥</span> <span class="font-semibold">الزبائن</span> </button> <button onclick="navigateTo('reports')" class="nav-item w-full text-right px-4 py-3 rounded-lg mb-2 flex items-center gap-3 hover:bg-gray-100"> <span class="text-2xl">📈</span> <span class="font-semibold">التقارير</span> </button> <button onclick="navigateTo('investment')" class="nav-item w-full text-right px-4 py-3 rounded-lg mb-2 flex items-center gap-3 hover:bg-gray-100"> <span class="text-2xl">💰</span> <span class="font-semibold">اقتراح استثمار</span> </button> <button onclick="navigateTo('settings')" class="nav-item w-full text-right px-4 py-3 rounded-lg mb-2 flex items-center gap-3 hover:bg-gray-100"> <span class="text-2xl">⚙️</span> <span class="font-semibold">الإعدادات</span> </button>
+    </nav>
+   </aside><!-- Main Content -->
+   <main class="flex-1 overflow-auto"><!-- Mobile Header -->
+    <header class="bg-white shadow-sm p-4 md:hidden flex justify-between items-center"><button onclick="toggleSidebar()" class="text-2xl">☰</button>
+     <h2 id="mobile-title" class="text-lg font-bold">الرئيسية</h2>
+     <div class="w-8"></div>
+    </header>
+    <div class="p-4 md:p-8"><!-- Home Screen -->
+     <div id="screen-home" class="screen">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">لوحة التحكم</h2><!-- Stats Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+       <div class="stat-card p-6 rounded-lg shadow-lg">
+        <div class="flex justify-between items-start mb-2">
+         <div>
+          <p class="text-white text-opacity-90 text-sm">مبيعات اليوم</p>
+          <p id="today-sales" class="text-3xl font-bold text-white mt-2">0</p>
+         </div><span class="text-4xl">💰</span>
+        </div>
+        <p id="today-currency-1" class="text-white text-opacity-75 text-sm">دينار</p>
+       </div>
+       <div class="bg-white p-6 rounded-lg shadow-lg card">
+        <div class="flex justify-between items-start mb-2">
+         <div>
+          <p class="text-gray-600 text-sm">ربح اليوم</p>
+          <p id="today-profit" class="text-3xl font-bold text-green-600 mt-2">0</p>
+         </div><span class="text-4xl">📈</span>
+        </div>
+        <p id="today-currency-2" class="text-gray-500 text-sm">دينار</p>
+       </div>
+       <div class="bg-white p-6 rounded-lg shadow-lg card">
+        <div class="flex justify-between items-start mb-2">
+         <div>
+          <p class="text-gray-600 text-sm">عدد المبيعات</p>
+          <p id="today-count" class="text-3xl font-bold text-blue-600 mt-2">0</p>
+         </div><span class="text-4xl">🛍️</span>
+        </div>
+        <p class="text-gray-500 text-sm">عملية بيع</p>
+       </div>
+       <div class="bg-white p-6 rounded-lg shadow-lg card">
+        <div class="flex justify-between items-start mb-2">
+         <div>
+          <p class="text-gray-600 text-sm">تنبيهات مخزون</p>
+          <p id="low-stock-count" class="text-3xl font-bold text-red-600 mt-2">0</p>
+         </div><span class="text-4xl">⚠️</span>
+        </div>
+        <p class="text-gray-500 text-sm">منتج منخفض</p>
+       </div>
+      </div><!-- Quick Actions -->
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">إجراءات سريعة</h3>
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div onclick="navigateTo('quick-sale')" class="quick-action bg-purple-50 p-4 rounded-lg text-center cursor-pointer">
+         <div class="text-4xl mb-2">
+          ⚡
+         </div>
+         <p class="font-semibold text-gray-700">بيع سريع</p>
+        </div>
+        <div onclick="openAddProductModal()" class="quick-action bg-blue-50 p-4 rounded-lg text-center cursor-pointer">
+         <div class="text-4xl mb-2">
+          ➕
+         </div>
+         <p class="font-semibold text-gray-700">منتج جديد</p>
+        </div>
+        <div onclick="navigateTo('customers')" class="quick-action bg-green-50 p-4 rounded-lg text-center cursor-pointer">
+         <div class="text-4xl mb-2">
+          👤
+         </div>
+         <p class="font-semibold text-gray-700">زبون جديد</p>
+        </div>
+        <div onclick="navigateTo('reports')" class="quick-action bg-yellow-50 p-4 rounded-lg text-center cursor-pointer">
+         <div class="text-4xl mb-2">
+          📊
+         </div>
+         <p class="font-semibold text-gray-700">التقارير</p>
+        </div>
+       </div>
+      </div><!-- Recent Sales & Alerts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+       <div class="bg-white rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">آخر المبيعات</h3>
+        <div id="recent-sales" class="space-y-3">
+         <p class="text-center text-gray-500 py-8">لا توجد مبيعات بعد</p>
+        </div>
+       </div>
+       <div class="bg-white rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">تنبيهات المخزون</h3>
+        <div id="stock-alerts" class="space-y-3">
+         <p class="text-center text-gray-500 py-8">لا توجد تنبيهات</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- Quick Sale Screen -->
+     <div id="screen-quick-sale" class="screen hidden">
+      <div class="flex justify-between items-center mb-6">
+       <h2 class="text-3xl font-bold text-gray-800">بيع سريع ⚡</h2><button onclick="clearSaleCart()" class="btn bg-red-500 text-white px-4 py-2 rounded-lg"> مسح الكل </button>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><!-- Product Selection -->
+       <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-4"><input type="text" id="quick-search" placeholder="ابحث عن منتج أو امسح الباركود..." class="search-input w-full px-4 py-3 border border-gray-300 rounded-lg">
+        </div>
+        <div id="quick-products-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        </div>
+       </div><!-- Sale Cart -->
+       <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-lg p-6 sticky top-4">
+         <h3 class="text-xl font-bold text-gray-800 mb-4">سلة البيع</h3>
+         <div id="sale-cart" class="space-y-3 mb-4 max-h-64 overflow-y-auto">
+          <p class="text-center text-gray-500 py-8">السلة فارغة</p>
+         </div>
+         <div class="border-t pt-4 space-y-2">
+          <div class="flex justify-between text-gray-700"><span>المجموع الفرعي:</span> <span id="cart-subtotal" class="font-semibold">0</span>
+          </div>
+          <div class="flex justify-between text-lg font-bold text-gray-800"><span>الإجمالي:</span> <span id="cart-total">0</span>
+          </div>
+          <div class="flex justify-between text-green-600 font-semibold"><span>الربح المتوقع:</span> <span id="cart-profit">0</span>
+          </div>
+         </div>
+         <div class="mt-4 space-y-3"><select id="quick-customer-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg"> <option value="طالب">طالب</option> <option value="طفل">طفل</option> <option value="امرأة">امرأة</option> <option value="رجل">رجل</option> <option value="هدية">هدية</option> <option value="متجر آخر">متجر آخر</option> </select> <select id="quick-payment-method" class="w-full px-4 py-2 border border-gray-300 rounded-lg"> <option value="نقدي">نقدي</option> <option value="بطاقة">بطاقة</option> <option value="تحويل">تحويل</option> </select> <button onclick="completeSale()" class="btn w-full bg-green-600 text-white py-3 rounded-lg font-bold text-lg"> إتمام البيع 💳 </button>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Products Screen -->
+     <div id="screen-products" class="screen hidden">
+      <div class="flex justify-between items-center mb-6 mobile-stack">
+       <h2 class="text-3xl font-bold text-gray-800">المنتجات والفئات 📦</h2><button onclick="openAddProductModal()" class="btn bg-green-600 text-white px-6 py-3 rounded-lg font-semibold"> ➕ منتج جديد </button>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4"><input type="text" id="search-products" placeholder="ابحث عن منتج..." class="search-input px-4 py-2 border border-gray-300 rounded-lg"> <select id="filter-category" class="px-4 py-2 border border-gray-300 rounded-lg"> <option value="">كل الفئات</option> <option value="ألعاب">ألعاب</option> <option value="ملابس">ملابس</option> <option value="كوزمتك">كوزمتك</option> <option value="قرطاسية">قرطاسية</option> <option value="استنساخ">استنساخ</option> <option value="أخرى">أخرى</option> </select> <select id="filter-stock-status" class="px-4 py-2 border border-gray-300 rounded-lg"> <option value="">كل المنتجات</option> <option value="low">مخزون منخفض</option> <option value="out">نفد المخزون</option> <option value="available">متوفر</option> </select>
+       </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+       <div class="table-responsive">
+        <table class="w-full">
+         <thead class="bg-gray-50">
+          <tr>
+           <th class="px-6 py-4 text-right text-sm font-bold text-gray-700">المنتج</th>
+           <th class="px-6 py-4 text-right text-sm font-bold text-gray-700">الفئة</th>
+           <th class="px-6 py-4 text-right text-sm font-bold text-gray-700">الشراء</th>
+           <th class="px-6 py-4 text-right text-sm font-bold text-gray-700">البيع</th>
+           <th class="px-6 py-4 text-right text-sm font-bold text-gray-700">الربح</th>
+           <th class="px-6 py-4 text-right text-sm font-bold text-gray-700">المخزون</th>
+           <th class="px-6 py-4 text-right text-sm font-bold text-gray-700">الحالة</th>
+           <th class="px-6 py-4 text-right text-sm font-bold text-gray-700">إجراءات</th>
+          </tr>
+         </thead>
+         <tbody id="products-table">
+         </tbody>
+        </table>
+       </div>
+      </div>
+     </div><!-- Inventory Screen -->
+     <div id="screen-inventory" class="screen hidden">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">إدارة المخزون 📊</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+       <div class="bg-white p-6 rounded-lg shadow-lg">
+        <p class="text-gray-600 text-sm mb-2">إجمالي قيمة المخزون</p>
+        <p id="inventory-value" class="text-3xl font-bold text-purple-600">0</p>
+        <p id="inventory-currency-1" class="text-sm text-gray-500">دينار</p>
+       </div>
+       <div class="bg-white p-6 rounded-lg shadow-lg">
+        <p class="text-gray-600 text-sm mb-2">عدد المنتجات</p>
+        <p id="total-products" class="text-3xl font-bold text-blue-600">0</p>
+        <p class="text-sm text-gray-500">منتج مختلف</p>
+       </div>
+       <div class="bg-white p-6 rounded-lg shadow-lg">
+        <p class="text-gray-600 text-sm mb-2">إجمالي الكميات</p>
+        <p id="total-items" class="text-3xl font-bold text-green-600">0</p>
+        <p class="text-sm text-gray-500">قطعة</p>
+       </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">المخزون حسب الفئة</h3>
+       <div id="inventory-by-category" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+       </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg p-6">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">⚠️ منتجات تحتاج إعادة تموين</h3>
+       <div id="restock-needed" class="space-y-3">
+       </div>
+      </div>
+     </div><!-- Customers Screen -->
+     <div id="screen-customers" class="screen hidden">
+      <div class="flex justify-between items-center mb-6 mobile-stack">
+       <h2 class="text-3xl font-bold text-gray-800">الزبائن والفئات 👥</h2><button onclick="openAddCustomerModal()" class="btn bg-green-600 text-white px-6 py-3 rounded-lg font-semibold"> ➕ زبون جديد </button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+       <div class="bg-white p-6 rounded-lg shadow-lg">
+        <p class="text-gray-600 text-sm mb-2">إجمالي الزبائن</p>
+        <p id="total-customers" class="text-3xl font-bold text-purple-600">0</p>
+       </div>
+       <div class="bg-white p-6 rounded-lg shadow-lg">
+        <p class="text-gray-600 text-sm mb-2">مبيعات الشهر</p>
+        <p id="month-sales-count" class="text-3xl font-bold text-blue-600">0</p>
+       </div>
+       <div class="bg-white p-6 rounded-lg shadow-lg">
+        <p class="text-gray-600 text-sm mb-2">متوسط البيع</p>
+        <p id="avg-sale" class="text-3xl font-bold text-green-600">0</p>
+       </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">المبيعات حسب فئة الزبون</h3>
+       <div id="sales-by-customer-type" class="space-y-3">
+       </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-lg p-6">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">قائمة الزبائن</h3><input type="text" id="search-customers" placeholder="ابحث عن زبون..." class="search-input w-full px-4 py-2 border border-gray-300 rounded-lg mb-4">
+       <div id="customers-list" class="space-y-3">
+       </div>
+      </div>
+     </div><!-- Reports Screen -->
+     <div id="screen-reports" class="screen hidden">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">التقارير والتحليلات 📈</h2>
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+       <div class="flex gap-2 flex-wrap mb-4"><button onclick="setReportPeriod('today')" id="period-today" class="btn px-4 py-2 rounded-lg bg-purple-600 text-white">اليوم</button> <button onclick="setReportPeriod('week')" id="period-week" class="btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700">آخر 7 أيام</button> <button onclick="setReportPeriod('month')" id="period-month" class="btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700">آخر 30 يوم</button> <button onclick="setReportPeriod('all')" id="period-all" class="btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700">كل الفترة</button>
+       </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+       <div class="bg-white p-6 rounded-lg shadow-lg">
+        <p class="text-gray-600 text-sm mb-2">إجمالي المبيعات</p>
+        <p id="report-revenue" class="text-3xl font-bold text-purple-600">0</p>
+        <p id="report-currency-1" class="text-sm text-gray-500">دينار</p>
+       </div>
