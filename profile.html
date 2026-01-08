@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KADHIM SHAKIR - CS Undergraduate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(53, 59, 60, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(132, 106, 106, 0.05) 1px, transparent 1px);
+            background-size: 25px 25px;
+            z-index: -1;
+        }
+        
+        .profile-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .profile-border {
+            height: 5px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            width: 100%;
+        }
+        
+        .profile-content {
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .profile-image-container {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            overflow: visible;
+            margin-bottom: 30px;
+            border: 5px solid white;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+        }
+        
+        .profile-image-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 80px;
+        }
+        
+        .verified-badge-overlay {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+            border: 5px solid white;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            animation: pulse 2s infinite;
+            transform: translate(15px, 15px);
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(15px, 15px) scale(1); }
+            50% { transform: translate(15px, 15px) scale(1.1); }
+            100% { transform: translate(15px, 15px) scale(1); }
+        }
+        
+        .profile-name {
+            color: #353b3c;
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .verified-text {
+            color: #846a6a;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .profile-title {
+            color: #846a6a;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .profile-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            border-radius: 0;
+        }
+        
+        .social-links-section {
+            width: 100%;
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            color: #353b3c;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .social-links-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .social-link-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 25px;
+            text-decoration: none;
+            border-radius: 0;
+            background-color: rgba(53, 59, 60, 0.03);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-link-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+        
+        .social-link-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(132, 106, 106, 0.2);
+            border-color: #846a6a;
+        }
+        
+        .social-link-item:hover::before {
+            opacity: 0.05;
+        }
+        
+        .social-icon {
+            font-size: 28px;
+            margin-right: 20px;
+            width: 40px;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .social-info {
+            flex: 1;
+            text-align: left;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .social-name {
+            color: #353b3c;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-detail {
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .social-link-item:hover .social-name,
+        .social-link-item:hover .social-detail {
+            color: #353b3c;
+        }
+        
+        .social-arrow {
+            font-size: 16px;
+            color: #846a6a;
+            opacity: 0.7;
+            z-index: 2;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link-item:hover .social-arrow {
+            transform: translateX(5px);
+            color: #353b3c;
+        }
+        
+        .profile-description {
+            margin-top: 40px;
+            color: #666;
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 600px;
+            text-align: center;
+            padding: 25px;
+            background-color: rgba(53, 59, 60, 0.02);
+            border-radius: 0;
+            border-left: 4px solid #846a6a;
+            position: relative;
+        }
+        
+        .profile-description::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 60px;
+            color: rgba(132, 106, 106, 0.2);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        
+        .profile-description p {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .university-info {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #846a6a;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Individual Social Media Colors */
+        .email-icon { color: #D44638; }
+        .telegram-icon { color: #0088cc; }
+        .instagram-icon { background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .github-icon { color: #333; }
+        .linkedin-icon { color: #0077B5; }
+        
+        .social-alternative {
+            font-size: 16px;
+            color: #846a6a;
+            z-index: 2;
+            position: relative;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-content {
+                padding: 40px 30px;
+            }
+            
+            .profile-image-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .verified-badge-overlay {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                border: 4px solid white;
+                transform: translate(12px, 12px);
+            }
+            
+            .profile-name {
+                font-size: 32px;
+            }
+            
+            .verified-text {
+                font-size: 16px;
+            }
+            
+            .profile-title {
+                font-size: 20px;
+            }
+            
+            .social-links-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .social-link-item {
+                padding: 18px 22px;
+            }
+            
+            .profile-description {
+                padding: 22px;
+                font-size: 15px;
+            }
+            
+            .profile-description::before {
+                font-size: 50px;
+                left: 12px;
+                top: 8px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            .profile-content {
+                padding: 35px 25px;
+            }
+            
+            .profile-image-container {
+                width: 180px;
+                height: 180px;
+                margin-bottom: 25px;
+            }
+            
+            .verified-badge-overlay {
+                width: 45px;
+                height: 45px;
+                font-size: 22px;
+                border: 4px solid white;
+                transform: translate(10px, 10px);
+            }
+            
+            .profile-name {
+                font-size: 28px;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .profile-title {
+                font-size: 18px;
+                margin-bottom: 30px;
+            }
+            
+            .section-title {
+                font-size: 22px;
+                margin-bottom: 25px;
+            }
+            
+            .social-links-grid {
+                gap: 12px;
+            }
+            
+            .social-link-item {
+                padding: 16px 20px;
+            }
+            
+            .social-icon {
+                font-size: 24px;
+                margin-right: 15px;
+                width: 35px;
+            }
+            
+            .social-name {
+                font-size: 16px;
+            }
+            
+            .profile-description {
+                font-size: 15px;
+                padding: 20px;
+                margin-top: 30px;
+            }
+            
+            .profile-description::before {
+                font-size: 45px;
+                left: 10px;
+                top: 5px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .profile-content {
+                padding: 30px 20px;
+            }
+            
+            .profile-image-container {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .verified-badge-overlay {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                border: 3px solid white;
+                transform: translate(8px, 8px);
+            }
+            
+            .profile-name {
+                font-size: 26px;
+            }
+            
+            .profile-title {
+                font-size: 17px;
+            }
+            
+            .social-link-item {
+                padding: 14px 18px;
+            }
+            
+            .social-icon {
+                font-size: 22px;
+                margin-right: 12px;
+            }
+            
+            .social-name {
+                font-size: 15px;
+            }
+            
+            .social-detail {
+                font-size: 13px;
+            }
+            
+            .profile-description {
+                padding: 18px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    
+    <div class="profile-container">
+        <div class="profile-border"></div>
+        
+        <div class="profile-content">
+            <div class="profile-image-container">
+                <!---
+                <div class="profile-image-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+                --->
+                <div class="verified-badge-overlay">
+                    <i class="fas fa-check"></i>
+                </div>
+                
+                <img src="./photo_2026-01-05_05-54-04.jpg" alt="KADHIM SHAKIR" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                
+            </div>
+            
+            <h1 class="profile-name">
+                KADHIM SHAKIR
+                <span class="verified-text">
+                    <i class="fas fa-check-circle"></i>
+                    Verified
+                </span>
+            </h1>
+            
+            <div class="profile-title">Computer Science Undergraduate</div>
+            
+            <div class="social-links-section">
+                <h2 class="section-title">Connect With Me</h2>
+                
+                <div class="social-links-grid">
+                    <!-- Email -->
+                    <a href="mailto:ninjatech404@gmail.com" class="social-link-item">
+                        <div class="social-icon email-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">Email</div>
+                            <div class="social-detail">ninjatech404@gmail.com</div>
+                        </div>
+                        <div class="social-arrow">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- Telegram -->
+                    <a href="https://t.me/K404_IO" target="_blank" class="social-link-item">
+                        <div class="social-icon telegram-icon">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">Telegram</div>
+                            <div class="social-detail">@K404_IO</div>
+                        </div>
+                        <div class="social-arrow">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/k404_io?utm_source=qr&igsh=MTN6cDBmd28zb292YQ==" target="_blank" class="social-link-item">
+                        <div class="social-icon instagram-icon">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">Instagram</div>
+                            <div class="social-detail">@k404_io</div>
+                        </div>
+                        <div class="social-arrow">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- GitHub -->
+                    <a href="https://github.com/NinjaTech404" target="_blank" class="social-link-item">
+                        <div class="social-icon github-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">GitHub</div>
+                            <div class="social-detail">NinjaTech404</div>
+                        </div>
+                        <div class="social-arrow">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- LinkedIn -->
+                    <div class="social-link-item" id="linkedin-item">
+                        <div class="social-icon linkedin-icon">
+                            <i class="fab fa-linkedin"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">LinkedIn</div>
+                            <div class="social-detail">Profile Not Available</div>
+                        </div>
+                        <div class="social-alternative">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Portfolio -->
+                    <a href="https://ninjatech404.github.io" target="_blank" class="social-link-item">
+                        <div class="social-icon" style="color: #353b3c;">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">Portfolio</div>
+                            <div class="social-detail">ninjatech404.github.io</div>
+                        </div>
+                        <div class="social-arrow">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="profile-description">
+                <p>Computer Science undergraduate with a passion for software development, web technologies, and problem-solving. Currently expanding skills in full-stack development while pursuing academic excellence at the University of Al-Qadisiyah.</p>
+            </div>
+            
+            <div class="university-info">
+                <i class="fas fa-university"></i>
+                <span>University of Al-Qadisiyah - College of Computer Science & IT</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileContainer = document.querySelector('.profile-container');
+            const profileBorder = document.querySelector('.profile-border');
+            const socialLinks = document.querySelectorAll('.social-link-item');
+            const linkedinItem = document.getElementById('linkedin-item');
+            const verifiedBadge = document.querySelector('.verified-badge-overlay');
+            
+            // Add hover effect to the profile border
+            profileContainer.addEventListener('mouseenter', () => {
+                profileBorder.style.background = 'linear-gradient(135deg, #846a6a, #353b3c)';
+            });
+            
+            profileContainer.addEventListener('mouseleave', () => {
+                profileBorder.style.background = 'linear-gradient(135deg, #353b3c, #846a6a)';
+            });
+            
+            // Add click effect to social links
+            socialLinks.forEach(link => {
+                if (link.id !== 'linkedin-item') {
+                    link.addEventListener('click', function(e) {
+                        // Add a visual feedback for the click
+                        this.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 200);
+                    });
+                }
+            });
+            
+            // LinkedIn special behavior (opens alternatives on click)
+            linkedinItem.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Create a small popup/modal for LinkedIn alternatives
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                `;
+                
+                const modalContent = document.createElement('div');
+                modalContent.style.cssText = `
+                    background: white;
+                    padding: 30px;
+                    border-radius: 0;
+                    max-width: 400px;
+                    width: 90%;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                    text-align: center;
+                    border-top: 5px solid #846a6a;
+                `;
+                
+                modalContent.innerHTML = `
+                    <h3 style="color: #353b3c; margin-bottom: 15px;">LinkedIn Profile Not Available</h3>
+                    <p style="color: #666; margin-bottom: 25px; line-height: 1.6;">My LinkedIn profile is currently not available. You can try these alternatives:</p>
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;">
+                        <a href="https://www.linkedin.com/search/results/people/" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #f5f7fa; border-radius: 0; text-decoration: none; color: #353b3c; font-weight: 600; transition: all 0.3s; border-left: 3px solid #846a6a;">
+                            <i class="fas fa-search" style="color: #846a6a;"></i>
+                            <span>Search on LinkedIn</span>
+                        </a>
+                        <a href="mailto:ninjatech404@gmail.com" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #f5f7fa; border-radius: 0; text-decoration: none; color: #353b3c; font-weight: 600; transition: all 0.3s; border-left: 3px solid #846a6a;">
+                            <i class="fas fa-envelope" style="color: #846a6a;"></i>
+                            <span>Send me an Email</span>
+                        </a>
+                    </div>
+                    <button id="closeModal" style="background: linear-gradient(135deg, #353b3c, #846a6a); color: white; border: none; padding: 12px 25px; border-radius: 0; font-weight: 600; cursor: pointer; transition: opacity 0.3s;">Close</button>
+                `;
+                
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+                
+                // Add close functionality
+                document.getElementById('closeModal').addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                });
+                
+                // Close modal when clicking outside
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        document.body.removeChild(modal);
+                    }
+                });
+            });
+            
+            // Add visual feedback to the LinkedIn item
+            linkedinItem.style.cursor = 'pointer';
+            
+            // Interactive verified badge
+            verifiedBadge.addEventListener('mouseenter', () => {
+                verifiedBadge.style.transform = 'translate(15px, 15px) scale(1.3)';
+                verifiedBadge.style.transition = 'transform 0.3s ease';
+                verifiedBadge.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.4)';
+            });
+            
+            verifiedBadge.addEventListener('mouseleave', () => {
+                verifiedBadge.style.transform = 'translate(15px, 15px) scale(1)';
+                verifiedBadge.style.boxShadow = '0 3px 15px rgba(0, 0, 0, 0.3)';
+            });
+            
+            // Click effect for verified badge
+            verifiedBadge.addEventListener('click', () => {
+                verifiedBadge.style.transform = 'translate(15px, 15px) scale(0.9)';
+                setTimeout(() => {
+                    verifiedBadge.style.transform = 'translate(15px, 15px) scale(1)';
+                }, 200);
+            });
+            
+            // Pulse animation for the profile icon
+            const profileIcon = document.querySelector('.profile-image-placeholder i');
+            setInterval(() => {
+                profileIcon.style.transition = 'transform 0.5s ease';
+                profileIcon.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    profileIcon.style.transform = 'scale(1)';
+                }, 500);
+            }, 3000);
+            
+            // Rotate animation for the verified badge
+            setInterval(() => {
+                verifiedBadge.style.transition = 'transform 0.5s ease';
+                verifiedBadge.style.transform = 'translate(15px, 15px) rotate(15deg)';
+                setTimeout(() => {
+                    verifiedBadge.style.transform = 'translate(15px, 15px) rotate(0deg)';
+                }, 500);
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

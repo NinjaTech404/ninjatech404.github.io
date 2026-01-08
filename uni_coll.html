@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Education - University & College</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            padding: 15px;
+        }
+        
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(53, 59, 60, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(132, 106, 106, 0.05) 1px, transparent 1px);
+            background-size: 25px 25px;
+            z-index: -1;
+        }
+        
+        .cards-container {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 1000px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .card {
+            background-color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            transition: transform 0.3s ease;
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .card-border {
+            height: 5px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            width: 100%;
+        }
+        
+        .card-content {
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            width: 95px;
+            height: 95px;
+            position: relative;
+            margin-bottom: 22px;
+        }
+        
+        .icon-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .main-icon {
+            font-size: 70px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .status-icon {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            font-size: 16px;
+            color: white;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            z-index: 2;
+        }
+        
+        h1 {
+            color: #353b3c;
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .institution-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 22px;
+            width: 100%;
+        }
+        
+        .institution-name {
+            color: #846a6a;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            line-height: 1.3;
+        }
+        
+        .institution-details {
+            color: #353b3c;
+            font-size: 15px;
+            margin-top: 6px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px;
+            border-radius: 8px;
+            background-color: rgba(53, 59, 60, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            background-color: rgba(132, 106, 106, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .stat-icon {
+            font-size: 24px;
+            color: #846a6a;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            color: #353b3c;
+            font-size: 21px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 14px;
+            margin: 24px 0;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 22px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 190px;
+        }
+        
+        .primary-btn {
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.3);
+        }
+        
+        .secondary-btn {
+            background-color: #f5f7fa;
+            color: #353b3c;
+            border: 1px solid #ddd;
+        }
+        
+        .secondary-btn:hover {
+            background-color: #e8eaed;
+            transform: translateY(-2px);
+            border-color: #846a6a;
+        }
+        
+        .key-info {
+            width: 100%;
+            margin-top: 22px;
+            padding-top: 22px;
+            border-top: 1px solid #eee;
+        }
+        
+        .info-title {
+            color: #353b3c;
+            font-size: 17px;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 8px;
+            border-radius: 8px;
+            background-color: rgba(53, 59, 60, 0.03);
+        }
+        
+        .info-label {
+            color: #846a6a;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        
+        .info-value {
+            color: #353b3c;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.3;
+        }
+        
+        .note {
+            margin-top: 22px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+            width: 100%;
+            max-width: 420px;
+        }
+        
+        .departments-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            width: 100%;
+        }
+        
+        .department-tag {
+            background-color: rgba(132, 106, 106, 0.1);
+            color: #846a6a;
+            padding: 7px 14px;
+            border-radius: 18px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(132, 106, 106, 0.2);
+            white-space: nowrap;
+        }
+        
+        /* Responsive Breakpoints */
+        @media (max-width: 1000px) {
+            .cards-container {
+                max-width: 90%;
+            }
+            
+            .card {
+                max-width: 45%;
+                min-width: 280px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
+                max-width: 500px;
+            }
+            
+            .card {
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            .card-content {
+                padding: 28px 22px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .card-content {
+                padding: 25px 20px;
+            }
+            
+            .icon-container {
+                width: 90px;
+                height: 90px;
+                margin-bottom: 20px;
+            }
+            
+            .icon-wrapper {
+                width: 75px;
+                height: 75px;
+            }
+            
+            .main-icon {
+                font-size: 65px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .institution-name {
+                font-size: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .action-btn {
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .departments-list {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .department-tag {
+                width: 80%;
+                text-align: center;
+                white-space: normal;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .card-content {
+                padding: 22px 18px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            .institution-name {
+                font-size: 18px;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .institution-details {
+                font-size: 14px;
+            }
+            
+            .stat-item {
+                padding: 12px 8px;
+            }
+            
+            .stat-value {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    
+    <div class="cards-container">
+        <!-- University Card -->
+        <div class="card">
+            <div class="card-border"></div>
+            
+            <div class="card-content">
+                <div class="icon-container">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-university main-icon"></i>
+                        <div class="status-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <h1>University</h1>
+                
+                <div class="institution-info">
+                    <div class="institution-name">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>University of Al-Qadisiyah</span>
+                    </div>
+                    
+                    <div class="institution-details">
+                        Diwaniyah, Al-Qadisiyah Province, Iraq
+                    </div>
+                    
+                    <div class="institution-details">
+                        Founded in 1987 • Public Research University
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <i class="fas fa-users stat-icon"></i>
+                        <div class="stat-value">18</div>
+                        <div class="stat-label">Colleges</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-user-graduate stat-icon"></i>
+                        <div class="stat-value">21K+</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-chalkboard-teacher stat-icon"></i>
+                        <div class="stat-value">1,400+</div>
+                        <div class="stat-label">Professors</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy stat-icon"></i>
+                        <div class="stat-value">#8</div>
+                        <div class="stat-label">National Rank</div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="https://en.qu.edu.iq/" target="_blank" class="action-btn primary-btn">
+                        <i class="fas fa-external-link-alt"></i> Official Website
+                    </a>
+                    <a href="https://en.wikipedia.org/wiki/University_of_Al-Qadisiyah" target="_blank" class="action-btn secondary-btn">
+                        <i class="fab fa-wikipedia-w"></i> Wikipedia
+                    </a>
+                </div>
+                
+                <div class="key-info">
+                    <div class="info-title">Key Information</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Motto</div>
+                            <div class="info-value">"My Lord Giveth Thy Knowledge"</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Main Campus</div>
+                            <div class="info-value">150 acres</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Official Color</div>
+                            <div class="info-value">Sapphire Blue</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Established</div>
+                            <div class="info-value">1987 (37 years)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="note">
+                    A leading public university in Iraq with comprehensive academic programs across 18 colleges. Ranked 8th nationally, it focuses on quality education, research, and community service.
+                </p>
+            </div>
+        </div>
+        
+        <!-- College of CS & IT Card -->
+        <div class="card">
+            <div class="card-border"></div>
+            
+            <div class="card-content">
+                <div class="icon-container">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-laptop-code main-icon"></i>
+                        <div class="status-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <h1>College</h1>
+                
+                <div class="institution-info">
+                    <div class="institution-name">
+                        <i class="fas fa-desktop"></i>
+                        <span>College of Computer Science & Information Technology</span>
+                    </div>
+                    
+                    <div class="institution-details">
+                        University of Al-Qadisiyah
+                    </div>
+                    
+                    <div class="institution-details">
+                        "Center of Excellence for Modern Computing Education"
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <i class="fas fa-code-branch stat-icon"></i>
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Departments</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-user-graduate stat-icon"></i>
+                        <div class="stat-value">Est. 2014</div>
+                        <div class="stat-label">Founded</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-award stat-icon"></i>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Degree Levels</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-bolt stat-icon"></i>
+                        <div class="stat-value">Modern</div>
+                        <div class="stat-label">Tech Focus</div>
+                    </div>
+                </div>
+                
+                <div class="departments-list">
+                    <div class="department-tag">Computer Science</div>
+                    <div class="department-tag">Information Technology</div>
+                    <div class="department-tag">Software Engineering</div>
+                    <div class="department-tag">Networks & Cybersecurity</div>
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="https://cm.qu.edu.iq/" target="_blank" class="action-btn primary-btn">
+                        <i class="fas fa-external-link-alt"></i> College Website
+                    </a>
+                    <a href="https://en.qu.edu.iq/" target="_blank" class="action-btn secondary-btn">
+                        <i class="fas fa-university"></i> Parent University
+                    </a>
+                </div>
+                
+                <div class="key-info">
+                    <div class="info-title">Academic Information</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">First Degrees</div>
+                            <div class="info-value">Bachelor's (B.Sc.)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Postgraduate</div>
+                            <div class="info-value">Master's (M.Sc.)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Highest Degree</div>
+                            <div class="info-value">Doctorate (Ph.D.)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Student Focus</div>
+                            <div class="info-value">Practical & Theoretical</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="note">
+                    The modern computing college established in 2014, offering comprehensive programs across 4 specialized departments. Focuses on both theoretical foundations and practical applications in computer science and IT fields.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            const cardBorders = document.querySelectorAll('.card-border');
+            
+            // Add hover effect to each card border
+            cards.forEach((card, index) => {
+                card.addEventListener('mouseenter', () => {
+                    cardBorders[index].style.background = 'linear-gradient(135deg, #846a6a, #353b3c)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    cardBorders[index].style.background = 'linear-gradient(135deg, #353b3c, #846a6a)';
+                });
+            });
+            
+            // Pulse animation for the main icons
+            const mainIcons = document.querySelectorAll('.main-icon');
+            mainIcons.forEach(icon => {
+                setInterval(() => {
+                    icon.style.transition = 'transform 0.5s ease';
+                    icon.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        icon.style.transform = 'scale(1)';
+                    }, 500);
+                }, 3000);
+            });
+            
+            // Add hover effects to stat items
+            const statItems = document.querySelectorAll('.stat-item');
+            statItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    const icon = item.querySelector('.stat-icon');
+                    if(icon) {
+                        icon.style.transform = 'scale(1.2)';
+                        icon.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    const icon = item.querySelector('.stat-icon');
+                    if(icon) {
+                        icon.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // Add interaction to institution names
+            const institutionNames = document.querySelectorAll('.institution-name');
+            institutionNames.forEach((name, index) => {
+                const links = [
+                    'https://en.qu.edu.iq/',
+                    'https://cm.qu.edu.iq/'
+                ];
+                
+                name.addEventListener('click', () => {
+                    window.open(links[index], '_blank');
+                });
+                
+                name.style.cursor = 'pointer';
+                name.title = 'Click to visit website';
+            });
+        });
+    </script>
+</body>
+</html>
