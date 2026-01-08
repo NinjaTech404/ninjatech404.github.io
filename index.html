@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Student Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e8eaed 0%, #d0d2d5 100%);
+            background-attachment: fixed;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 12px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle, rgba(100, 100, 100, 0.04) 1px, transparent 1px),
+                radial-gradient(circle at 50% 50%, rgba(120, 120, 120, 0.03) 2px, transparent 2px),
+                linear-gradient(45deg, transparent 48%, rgba(100, 100, 100, 0.02) 49%, rgba(100, 100, 100, 0.02) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(100, 100, 100, 0.02) 49%, rgba(100, 100, 100, 0.02) 51%, transparent 52%),
+                linear-gradient(0deg, transparent 24%, rgba(100, 100, 100, 0.03) 25%, rgba(100, 100, 100, 0.03) 26%, transparent 27%, transparent 74%, rgba(100, 100, 100, 0.03) 75%, rgba(100, 100, 100, 0.03) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(100, 100, 100, 0.03) 25%, rgba(100, 100, 100, 0.03) 26%, transparent 27%, transparent 74%, rgba(100, 100, 100, 0.03) 75%, rgba(100, 100, 100, 0.03) 76%, transparent 77%, transparent);
+            background-size: 20px 20px, 60px 60px, 40px 40px, 40px 40px, 50px 50px, 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+            max-width: 1400px;
+        }
+        
+        @media (min-width: 1024px) {
+            .cards-container {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                grid-template-rows: auto auto;
+                gap: 24px;
+                align-items: start;
+            }
+
+            .primary-card {
+                grid-column: 1;
+                grid-row: 1 / 3;
+                height: auto;
+            }
+
+            .secondary-card:nth-of-type(2) {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            .secondary-card:nth-of-type(3) {
+                grid-column: 2;
+                grid-row: 2;
+            }
+        }
+
+        .card {
+            width: 100%;
+            background: #f8f8f8;
+            border: 1px solid #c6c7c4;
+            box-shadow: 0 12px 32px rgba(53, 59, 60, 0.18), 0 0 40px rgba(132, 106, 106, 0.08);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: 2px;
+            position: relative;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(198, 199, 196, 0.02) 25%, rgba(198, 199, 196, 0.02) 26%, transparent 27%, transparent 74%, rgba(198, 199, 196, 0.02) 75%, rgba(198, 199, 196, 0.02) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(198, 199, 196, 0.02) 25%, rgba(198, 199, 196, 0.02) 26%, transparent 27%, transparent 74%, rgba(198, 199, 196, 0.02) 75%, rgba(198, 199, 196, 0.02) 76%, transparent 77%, transparent);
+            background-size: 40px 40px;
+            pointer-events: none;
+            border-radius: 2px;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #353b3c 0%, #846a6a 50%, #353b3c 100%);
+            z-index: 10;
+        }
+
+        .primary-card {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+
+        @media (min-width: 768px) {
+            .primary-card {
+                grid-template-columns: 240px 1fr;
+            }
+            
+            .info-content {
+                overflow-x: hidden;
+            }
+            
+            .stats-container,
+            .expertise-section {
+                max-width: 100%;
+            }
+        }
+
+        .quality-indicator {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 8px;
+            height: 8px;
+            background: #00aa00;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0, 170, 0, 0.6);
+            animation: pulse 2s infinite;
+            z-index: 15;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(0, 170, 0, 0.6); }
+            50% { box-shadow: 0 0 16px rgba(0, 170, 0, 0.8); }
+        }
+
+        .profile-side {
+            background: linear-gradient(135deg, #353b3c 0%, #846a6a 100%);
+            padding: 35px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .profile-side::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(198, 199, 196, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(162, 153, 158, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .profile-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #a2999e, #c6c7c4);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(53, 59, 60, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .profile-image {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a2999e, #c6c7c4);
+            border: 4px solid #c6c7c4;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 8px 20px rgba(53, 59, 60, 0.25), inset 0 2px 8px rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #eef0f2;
+            text-align: center;
+            line-height: 1.3;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
+        }
+
+        .profile-title {
+            font-size: 12px;
+            color: #c6c7c4;
+            text-align: center;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+        }
+
+        .divider {
+            width: 35px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #a2999e, transparent);
+            margin: 12px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .specialization {
+            font-size: 11px;
+            color: #a2999e;
+            text-align: center;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.5px;
+        }
+
+        .credentials-box {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(198, 199, 196, 0.2);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .credential-item {
+            font-size: 10px;
+            color: #c6c7c4;
+            margin-bottom: 6px;
+            line-height: 1.3;
+            display: flex;
+            gap: 6px;
+            align-items: flex-start;
+        }
+
+        .credential-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .credential-icon {
+            color: #a2999e;
+            min-width: 12px;
+        }
+
+        .expertise-badges {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .expertise-badge {
+            font-size: 9px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #c6c7c4;
+            padding: 5px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+        }
+
+        .expertise-badge:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .info-side {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-content {
+            padding: 35px 35px 20px 35px;
+            overflow-x: hidden;
+        }
+
+        .header-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 28px;
+            gap: 14px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #eef0f2;
+        }
+
+        .institution-logo {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #eef0f2;
+            font-size: 28px;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.2);
+            border: 1px solid rgba(198, 199, 196, 0.3);
+            position: relative;
+        }
+
+        .institution-logo::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            border-radius: 4px;
+        }
+
+        .header-text h2 {
+            font-size: 17px;
+            color: #353b3c;
+            margin-bottom: 3px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .header-text p {
+            font-size: 12px;
+            color: #846a6a;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #846a6a, #a2999e);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 14px;
+            flex-shrink: 0;
+            box-shadow: 0 3px 8px rgba(132, 106, 106, 0.15);
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #353b3c;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eef0f2;
+            flex: 1;
+        }
+
+        .info-item {
+            font-size: 12px;
+            color: #846a6a;
+            margin-bottom: 10px;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 6px 8px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .info-item:hover {
+            background-color: rgba(132, 106, 106, 0.05);
+            transform: translateX(2px);
+        }
+
+        .info-icon {
+            color: #a2999e;
+            min-width: 16px;
+            text-align: center;
+            margin-top: 3px;
+            font-size: 12px;
+        }
+
+        .info-text {
+            flex: 1;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #353b3c;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            color: #846a6a;
+            word-break: break-word;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 22px 0;
+            width: 100%;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #f0f0f0, #ebebeb);
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px 12px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(53, 59, 60, 0.05);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.12);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #846a6a;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #a2999e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 767px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-box {
+                padding: 20px 12px;
+            }
+        }
+
+        .expertise-section {
+            background: linear-gradient(135deg, #f5f5f5, #f0f0f0);
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 14px;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .expertise-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: #353b3c;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .expertise-title::before {
+            content: '★';
+            color: #846a6a;
+        }
+
+        .expertise-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .expertise-item {
+            font-size: 11px;
+            background: white;
+            color: #846a6a;
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid #d0d0d0;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .expertise-item:hover {
+            background: #846a6a;
+            color: white;
+            border-color: #846a6a;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .social-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #eef0f2, #f5f5f5);
+            border: 1.5px solid #c6c7c4;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #846a6a;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(53, 59, 60, 0.05);
+        }
+
+        .social-icon:hover {
+            background: linear-gradient(135deg, #846a6a, #a2999e);
+            color: #eef0f2;
+            border-color: #846a6a;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(132, 106, 106, 0.25);
+        }
+
+        .marquee-container {
+            width: 100%;
+            background: linear-gradient(90deg, #353b3c 0%, #846a6a 50%, #353b3c 100%);
+            padding: 14px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 -2px 8px rgba(53, 59, 60, 0.2);
+            border-top: 3px solid #a2999e;
+        }
+
+        .marquee {
+            display: flex;
+            animation: scroll 35s linear infinite;
+            gap: 40px;
+            min-width: 200%;
+        }
+
+        .marquee:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
+            color: #eef0f2;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .marquee-item::before {
+            content: '◆';
+            color: #ffaa00;
+            font-size: 12px;
+        }
+
+        .marquee-divider {
+            width: 2px;
+            height: 30px;
+            background: rgba(198, 199, 196, 0.3);
+        }
+
+        .secondary-card .secondary-content {
+            padding: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .secondary-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid #eef0f2;
+        }
+
+        .secondary-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #eef0f2;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.2);
+        }
+
+        .secondary-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #353b3c;
+            letter-spacing: 0.3px;
+        }
+
+        .secondary-subtitle {
+            font-size: 11px;
+            color: #846a6a;
+            margin-top: 2px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .item-card {
+            background: linear-gradient(135deg, #f5f5f5, #f0f0f0);
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(132, 106, 106, 0.15);
+            border-color: #d0d0d0;
+        }
+
+        .item-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .item-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #353b3c;
+            margin-bottom: 4px;
+        }
+
+        .item-description {
+            font-size: 9px;
+            color: #846a6a;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .item-tags {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .item-tag {
+            font-size: 8px;
+            background: white;
+            color: #a2999e;
+            padding: 2px 6px;
+            border-radius: 10px;
+            border: 1px solid #d0d0d0;
+            font-weight: 600;
+        }
+
+        @media (max-width: 767px) {
+            .info-content {
+                padding: 20px;
+            }
+
+            .secondary-content {
+                padding: 20px;
+            }
+
+            .header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-box {
+                padding: 20px 12px;
+            }
+            
+            .stat-number {
+                font-size: 28px;
+            }
+            
+            .stat-label {
+                font-size: 11px;
+            }
+        }
+        /*customized*/
+        .info-side{
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        .stat-box, .expertise-item{
+            cursor: pointer;
+        }
+        .profile-image > a , .profile-badge > a{
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .profile-image > a >img {
+            width: 100%;
+            object-fit: contain;
+            transform: scale(1.5);
+            position: relative;
+            top: 5px;
+            right: 3px;
+        }
+        .profile-badge{
+            overflow: hidden;
+        }
+        .profile-badge > a > img{
+            width: 100%;
+            object-fit: contain;
+        }
+        .header-text > h2 a{
+            color: #353b3c;
+            text-decoration: none;
+        }
+        .header-text > p a {
+            color: #846a6a;
+            text-decoration: underline;
+        }
+        .social-icon a{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+        .social-icon{
+            position: relative;
+        }
+        .info-value a{
+            color: #846a6a;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="cards-container">
+        <!-- PRIMARY PROFILE CARD -->
+        <div class="card primary-card">
+            <div class="quality-indicator"></div>
+            
+            <div class="profile-side">
+                <div class="profile-badge">
+                    <a href="https://en.qu.edu.iq/">
+                        <img src="./uni.png" alt="University Logo" loading="eager"/>                    
+                    </a>
+                </div>
+                <div class="profile-image">
+                    <a href="./photo_2026-01-05_05-54-04.jpg">
+                        <img src="./photo_2026-01-05_05-54-04.jpg" alt="profile image" loading="eager"/>
+                    </a>
+                </div>
+                <div>
+                    <div class="profile-name">KADHIM SHAKIR</div>
+                    <div class="profile-title">CS Undergraduate</div>
+                    <div class="divider"></div>
+                    <div class="specialization">Software Development & Engineering</div>
+                    
+                    <div class="credentials-box">
+                        <div class="credential-item">
+                            <span class="credential-icon">🎓</span>
+                            <span>B.Sc. Computer Science</span>
+                        </div>
+                        <div class="credential-item">
+                            <span class="credential-icon">📅</span>
+                            <span>Expected Graduation 2028</span>
+                        </div>
+                        <div class="credential-item">
+                            <span class="credential-icon">⭐</span>
+                            <span>GPA: 3.8/4.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expertise-badges">
+                    <div class="expertise-badge">Arabic</div>
+                    <div class="expertise-badge">English</div>
+                    <div class="expertise-badge">Spanish</div>
+                </div>
+            </div>
+
+            <div class="info-side">
+                <div class="info-content">
+                    <div class="header-bar">
+                        <div class="institution-logo">🏫</div>
+                        <div class="header-text">
+                            <h2><a href="https://en.qu.edu.iq/">Al-Qadisiyah University</a></h2>
+                            <p><a href="https://cm.qu.edu.iq/">CS. & IT. College - Computer Science Department</a></p>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">
+                            <div class="section-icon">💼</div>
+                            <div class="section-title">Academic Focus</div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">🎯</span>
+                            <div class="info-text">
+                                <span class="info-label">Major</span>
+                                <span class="info-value">Computer Science</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">📚</span>
+                            <div class="info-text">
+                                <span class="info-label">Specialization</span>
+                                <span class="info-value">Computer Software & Graphic Design</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">🏆</span>
+                            <div class="info-text">
+                                <span class="info-label">Achievements</span>
+                                <span class="info-value">Knowledge Tournament 2025, Event Winner</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-container">
+                        <div class="stat-box">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Languages</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Internships</div>
+                        </div>
+                    </div>
+
+                    <div class="expertise-section">
+                        <div class="expertise-title">Technical Skills</div>
+                        <div class="expertise-list">
+                            <div class="expertise-item">C/C++</div>
+                            <div class="expertise-item">Rust</div>
+                            <div class="expertise-item">Python</div>
+                            <div class="expertise-item">Java</div>
+                            <div class="expertise-item">Bash</div>
+                            <div class="expertise-item">JavaScript</div>
+                            <div class="expertise-item">React</div>
+                            <div class="expertise-item">Node.js</div>
+                            <div class="expertise-item">SQL</div>
+                            <div class="expertise-item">Git</div>
+                            <div class="expertise-item">Docker</div>
+                            <div class="expertise-item">Archlinux</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">
+                            <div class="section-icon">✉️</div>
+                            <div class="section-title">Contact Information</div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">📧</span>
+                            <div class="info-text">
+                                <span class="info-label">Email</span>
+                                <span class="info-value"><a href="./email.html">ninjatech404@gmail.com</a></span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">☎️</span>
+                            <div class="info-text">
+                                <span class="info-label">Phone</span>
+                                <span class="info-value">+964 (780) 159-5496</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">🌐</span>
+                            <div class="info-text">
+                                <span class="info-label">Portfolio</span>
+                                <span class="info-value"><a href="portfolio.html">ninjatech404.github.io</a></span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">📍</span>
+                            <div class="info-text">
+                                <span class="info-label">Location</span>
+                                <span class="info-value">Al-Qadisiyah State, Al-Diwaniyah City</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <div class="social-icon" title="GitHub">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+                            </svg>
+                            <a href="./github.html"></a>
+                        </div>
+                        <div class="social-icon" title="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                                <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"></path>
+                            </svg>
+                            <a href="./linkedin.html"></a>
+                        </div>
+                        <div class="social-icon" title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path>
+                            </svg>
+                            <a href="./instagram.html"></a>
+                        </div>
+                        <div class="social-icon" title="Telegram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"></path>
+                            </svg>
+                            <a href="./telegram.html"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Moving tape at bottom of card -->
+                <div class="marquee-container">
+                    <div class="marquee">
+                        <div class="marquee-item">Computer Science</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Full Stack Developer</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Problem Solver</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Open Source</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Team Player</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Quick Learner</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Innovation</div>
+                        <div class="marquee-divider"></div>
+                        <!-- Duplicate for seamless loop -->
+                        <div class="marquee-item">Computer Science</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Full Stack Developer</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">AI Enthusiast</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Problem Solver</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Open Source</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Team Player</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Quick Learner</div>
+                        <div class="marquee-divider"></div>
+                        <div class="marquee-item">Innovation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROJECTS CARD -->
+        <div class="card secondary-card">
+            <div class="secondary-content">
+                <div class="secondary-header">
+                    <div class="secondary-icon">🚀</div>
+                    <div>
+                        <div class="secondary-title">Featured Projects</div>
+                        <div class="secondary-subtitle">Recent Work & Contributions</div>
+                    </div>
+                </div>
+
+                <div class="items-grid">
+                    <div class="item-card">
+                        <div class="item-icon">🤖</div>
+                        <div class="item-title">AI Chatbot</div>
+                        <div class="item-description">Intelligent chatbot using NLP and machine learning for customer service automation.</div>
+                        <div class="item-tags">
+                            <span class="item-tag">Python</span>
+                            <span class="item-tag">TensorFlow</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-icon">🌐</div>
+                        <div class="item-title">E-Commerce Platform</div>
+                        <div class="item-description">Full-stack web application with payment integration and real-time inventory.</div>
+                        <div class="item-tags">
+                            <span class="item-tag">React</span>
+                            <span class="item-tag">Node.js</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-icon">📱</div>
+                        <div class="item-title">Mobile Fitness App</div>
+                        <div class="item-description">Cross-platform fitness tracking app with personalized workout plans.</div>
+                        <div class="item-tags">
+                            <span class="item-tag">React Native</span>
+                            <span class="item-tag">Firebase</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-icon">📊</div>
+                        <div class="item-title">Data Visualization Tool</div>
+                        <div class="item-description">Interactive dashboard for analyzing and visualizing complex datasets.</div>
+                        <div class="item-tags">
+                            <span class="item-tag">D3.js</span>
+                            <span class="item-tag">Python</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SKILLS & INTERESTS CARD -->
+        <div class="card secondary-card">
+            <div class="secondary-content">
+                <div class="secondary-header">
+                    <div class="secondary-icon">⚡</div>
+                    <div>
+                        <div class="secondary-title">Skills & Interests</div>
+                        <div class="secondary-subtitle">Expertise & Passions</div>
+                    </div>
+                </div>
+
+                <div class="items-grid">
+                    <div class="item-card">
+                        <div class="item-icon">💻</div>
+                        <div class="item-title">Web Development</div>
+                        <div class="item-description">Building responsive and scalable web applications with modern frameworks.</div>
+                        <div class="item-tags">
+                            <span class="item-tag">Expert</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-icon">🧠</div>
+                        <div class="item-title">Machine Learning</div>
+                        <div class="item-description">Developing intelligent systems and predictive models using ML algorithms.</div>
+                        <div class="item-tags">
+                            <span class="item-tag">Advanced</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-icon">☁️</div>
+                        <div class="item-title">Cloud Computing</div>
+                        <div class="item-description">Deploying and managing applications on AWS, Azure, and Google Cloud.</div>
+                        <div class="item-tags">
+                            <span class="item-tag">Intermediate</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-icon">🔒</div>
+                        <div class="item-title">Cybersecurity</div>
+                        <div class="item-description">Understanding security principles and implementing secure coding practices.</div>
+                        <div class="item-tags">
+                            <span class="item-tag">Learning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
