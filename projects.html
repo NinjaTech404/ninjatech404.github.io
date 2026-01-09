@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects | Development Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(53, 59, 60, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(132, 106, 106, 0.05) 1px, transparent 1px);
+            background-size: 25px 25px;
+            z-index: -1;
+        }
+        
+        /* Page Header */
+        .page-header {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            padding: 25px 30px;
+            background-color: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 0px;
+            border-top: 5px solid #846a6a;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        /* Logo Placeholder */
+        .logo-placeholder {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            border-radius: 20px;
+            color: white;
+            font-size: 36px;
+            box-shadow: 0 4px 15px rgba(132, 106, 106, 0.25);
+        }
+        
+        .header-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header-title {
+            color: #353b3c;
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .header-subtitle {
+            color: #846a6a;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        /* Home Button */
+        .home-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.4s ease;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(132, 106, 106, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .home-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(132, 106, 106, 0.35);
+        }
+        
+        .home-button:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Projects Container */
+        .projects-container {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        /* Project Card */
+        .project-card {
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 0px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 35px rgba(132, 106, 106, 0.15);
+            border-color: rgba(132, 106, 106, 0.3);
+        }
+        
+        .project-card-border {
+            height: 6px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            width: 100%;
+        }
+        
+        .project-card-content {
+            padding: 40px 45px;
+        }
+        
+        /* Project Header */
+        .project-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 35px;
+            gap: 30px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid rgba(53, 59, 60, 0.05);
+        }
+        
+        .project-icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 85px;
+            height: 85px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(53, 59, 60, 0.08), rgba(132, 106, 106, 0.08));
+            border: 3px solid rgba(132, 106, 106, 0.12);
+        }
+        
+        .project-main-icon {
+            font-size: 42px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .project-title-section {
+            flex: 1;
+        }
+        
+        .project-title {
+            color: #353b3c;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .project-subtitle {
+            color: #846a6a;
+            font-size: 19px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        /* Project Content Layout */
+        .project-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 40px;
+        }
+        
+        .project-description-section {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-description {
+            color: #444;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        /* Enhanced Blockquote Styles - Markdown-like */
+        .blockquote-container {
+            margin: 25px 0;
+        }
+        
+        .blockquote-title {
+            color: #353b3c;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+       
+        
+        .project-blockquote {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.7;
+            padding: 20px 20px;
+            background: linear-gradient(to right, rgba(53, 59, 60, 0.02), rgba(132, 106, 106, 0.02));
+            border-radius: 0;
+            border-left: 5px solid #846a6a;
+            position: relative;
+            font-style: normal;
+        }
+        
+        
+        .project-blockquote p {
+            position: relative;
+            padding-left: 15px;
+            margin: 0;
+        }
+        
+        /* Markdown-like Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(53, 59, 60, 0.03), rgba(132, 106, 106, 0.03));
+            border-radius: 12px;
+            padding: 22px 28px;
+            margin: 25px 0;
+            border: 1px solid rgba(132, 106, 106, 0.1);
+        }
+        
+        .info-box-title {
+            color: #353b3c;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        
+        .info-box-content {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        /* Project Features Section */
+        .project-features {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .features-title {
+            color: #353b3c;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .features-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+        }
+        
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+        
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            padding: 22px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(53, 59, 60, 0.02), rgba(132, 106, 106, 0.02));
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            border-color: rgba(132, 106, 106, 0.2);
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, rgba(53, 59, 60, 0.04), rgba(132, 106, 106, 0.04));
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+            color: #846a6a;
+            margin-bottom: 15px;
+        }
+        
+        .feature-name {
+            color: #353b3c;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .feature-desc {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Project Links */
+        .project-links {
+            display: flex;
+            gap: 20px;
+            padding-top: 35px;
+            border-top: 2px solid rgba(53, 59, 60, 0.05);
+        }
+        
+        .project-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 32px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(132, 106, 106, 0.25);
+            flex: 1;
+        }
+        
+        .project-link:hover {
+            opacity: 0.9;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(132, 106, 106, 0.35);
+        }
+        
+        .secondary-link {
+            background: linear-gradient(135deg, #f5f7fa, #e8eaed);
+            color: #353b3c;
+            border: 2px solid rgba(132, 106, 106, 0.15);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .secondary-link:hover {
+            background: linear-gradient(135deg, #e8eaed, #dce0e5);
+            border-color: rgba(132, 106, 106, 0.3);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1000px) {
+            .project-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .project-card-content {
+                padding: 35px 40px;
+            }
+        }
+        
+        @media (max-width: 850px) {
+            .page-header {
+                flex-direction: column;
+                gap: 25px;
+                text-align: center;
+                padding: 30px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 25px;
+            }
+            
+            .header-text {
+                align-items: center;
+                text-align: center;
+            }
+            
+            .project-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 25px;
+                padding-bottom: 30px;
+            }
+            
+            .project-icon-container {
+                margin: 0 auto;
+            }
+            
+            .project-title-section {
+                text-align: center;
+            }
+            
+            .home-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-links {
+                flex-direction: column;
+            }
+            
+            .project-link {
+                width: 100%;
+            }
+            
+            body {
+                padding: 15px;
+            }
+            
+            .project-card-content {
+                padding: 30px;
+            }
+            
+            .header-title {
+                font-size: 32px;
+            }
+            
+            .project-title {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 550px) {
+            .page-header {
+                padding: 25px 20px;
+            }
+            
+            .project-card-content {
+                padding: 25px;
+            }
+            
+            .project-content {
+                gap: 35px;
+            }
+            
+            .logo-placeholder {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
+            }
+            
+            .project-icon-container {
+                width: 75px;
+                height: 75px;
+            }
+            
+            .project-main-icon {
+                font-size: 36px;
+            }
+            
+            .project-title {
+                font-size: 26px;
+            }
+            
+            .project-subtitle {
+                font-size: 17px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .page-header {
+                padding: 20px 15px;
+            }
+            
+            .project-card-content {
+                padding: 20px;
+            }
+            
+            .header-title {
+                font-size: 28px;
+            }
+            
+            .project-title {
+                font-size: 24px;
+            }
+        }
+        /*customized code*/
+        .blockquote-title i, .project-blockquote i, .info-box i, .features-title i{
+            color:  #846a6a;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    
+    <!-- Page Header with Logo -->
+    <div class="page-header">
+        <div class="header-content">
+            <div class="logo-placeholder">
+                <i class="fas fa-code"></i>
+            </div>
+            
+            <div class="header-text">
+                <h1 class="header-title">My Projects Portfolio</h1>
+                <div class="header-subtitle">Complete Showcase of Development Work & Technical Solutions</div>
+            </div>
+        </div>
+        
+        <a href="index.html" class="home-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+    </div>
+    
+    <!-- Projects Container -->
+    <div class="projects-container">
+        <!-- Paradox Platform Card -->
+        <div class="project-card">
+            <div class="project-card-border"></div>
+            
+            <div class="project-card-content">
+                <div class="project-header">
+                    <div class="project-icon-container">
+                        <i class="fas fa-graduation-cap project-main-icon"></i>
+                    </div>
+                    
+                    <div class="project-title-section">
+                        <h2 class="project-title">Paradox Platform</h2>
+                        <div class="project-subtitle">Comprehensive Tech Education & Community Platform</div>
+                    </div>
+                </div>
+                
+                <div class="project-content">
+                    <div class="project-description-section">
+                        <div class="project-description">
+                            <p>A sophisticated platform dedicated to creating a vibrant ecosystem for technology learners and innovators. Designed to bridge academic theory with practical application through collaborative projects and real-world challenges.</p>
+                            
+                            <div class="blockquote-container">
+                                <div class="blockquote-title"><i class="fas fa-book"></i> Core Philosophy</div>
+                                <div class="project-blockquote">
+                                    <i class="fas fa-quote-left"></i> 
+                                    <p>We believe coding and programming are fundamental future skills. Our mission is to cultivate tech leaders equipped to solve complex challenges through innovation and collaboration.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-box">
+                                <div class="info-box-title"><i class="fas fa-info-circle"></i>Platform Impact</div>
+                                <div class="info-box-content">
+                                    Empowers students with hands-on experience, connects learners with industry mentors, and provides structured pathways from beginner to advanced technical proficiency.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-features">
+                        <h3 class="features-title"><i class="fas fa-cogs"></i>Technical Features</h3>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-users feature-icon"></i>
+                                <div class="feature-name">Community Building</div>
+                                <div class="feature-desc">Interactive forums, discussion groups, and collaborative coding environments</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-chalkboard-teacher feature-icon"></i>
+                                <div class="feature-name">Structured Learning</div>
+                                <div class="feature-desc">Comprehensive curriculum with beginner to advanced progression paths</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-hands-helping feature-icon"></i>
+                                <div class="feature-name">Mentorship Programs</div>
+                                <div class="feature-desc">One-on-one guidance from industry professionals and experienced developers</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-project-diagram feature-icon"></i>
+                                <div class="feature-name">Project-Based</div>
+                                <div class="feature-desc">Hands-on coding experiences and team projects with real-world applications</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-links">
+                    <a href="https://paradox-785a8-9c7ac.web.app/about_us" target="_blank" class="project-link">
+                        <i class="fas fa-external-link-alt"></i>
+                        View About Page
+                    </a>
+                    <a href="https://paradox-785a8-9c7ac.web.app" target="_blank" class="project-link secondary-link">
+                        <i class="fas fa-home"></i>
+                        Main Platform
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Al-Yaqeen Store Card -->
+        <div class="project-card">
+            <div class="project-card-border"></div>
+            
+            <div class="project-card-content">
+                <div class="project-header">
+                    <div class="project-icon-container">
+                        <i class="fas fa-store project-main-icon"></i>
+                    </div>
+                    
+                    <div class="project-title-section">
+                        <h2 class="project-title">Al-Yaqeen Store</h2>
+                        <div class="project-subtitle">Modern E-commerce Platform for European Electronics</div>
+                    </div>
+                </div>
+                
+                <div class="project-content">
+                    <div class="project-description-section">
+                        <div class="project-description">
+                            <p>A fully-featured e-commerce solution specializing in European electronics distribution. Built with modern web technologies to deliver exceptional shopping experiences across all devices.</p>
+                            
+                            <div class="blockquote-container">
+                                <div class="blockquote-title"><i class="fas fa-book"></i>Design Principle</div>
+                                <div class="project-blockquote">
+                                    <i class="fas fa-quote-left"></i> 
+                                    <p>An intuitive platform balancing aesthetic design with functional excellence, providing seamless navigation, secure transactions, and comprehensive product discovery.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-box">
+                                <div class="info-box-title"><i class="fas fa-info-circle"></i>Technical Architecture</div>
+                                <div class="info-box-content">
+                                    Responsive design framework, secure payment integration, real-time inventory management, and optimized performance for global accessibility.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-features">
+                        <h3 class="features-title"><i class="fas fa-cogs"></i>Platform Features</h3>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-shopping-cart feature-icon"></i>
+                                <div class="feature-name">Shopping System</div>
+                                <div class="feature-desc">Advanced cart management, wishlists, and streamlined checkout process</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-boxes feature-icon"></i>
+                                <div class="feature-name">Product Catalog</div>
+                                <div class="feature-desc">Comprehensive product organization with filtering and search capabilities</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-user-shield feature-icon"></i>
+                                <div class="feature-name">User Management</div>
+                                <div class="feature-desc">Secure account system with order history and personalized preferences</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-mobile-alt feature-icon"></i>
+                                <div class="feature-name">Responsive Design</div>
+                                <div class="feature-desc">Optimized experience across desktop, tablet, and mobile devices</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-links">
+                    <a href="https://alyaqeen--store.web.app" target="_blank" class="project-link">
+                        <i class="fas fa-external-link-alt"></i>
+                        Visit Store
+                    </a>
+                    <a href="https://alyaqeen--store.web.app" target="_blank" class="project-link secondary-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Start Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Portfolio Website Card -->
+        <div class="project-card">
+            <div class="project-card-border"></div>
+            
+            <div class="project-card-content">
+                <div class="project-header">
+                    <div class="project-icon-container">
+                        <i class="fas fa-briefcase project-main-icon"></i>
+                    </div>
+                    
+                    <div class="project-title-section">
+                        <h2 class="project-title">Portfolio Website</h2>
+                        <div class="project-subtitle">Professional Development Showcase & Personal Branding Platform</div>
+                    </div>
+                </div>
+                
+                <div class="project-content">
+                    <div class="project-description-section">
+                        <div class="project-description">
+                            <p>A meticulously crafted personal portfolio demonstrating technical proficiency, project accomplishments, and professional capabilities through elegant design and intuitive user experience.</p>
+                            
+                            <div class="blockquote-container">
+                                <div class="blockquote-title"><i class="fas fa-book"></i>Design Approach</div>
+                                <div class="project-blockquote">
+                                    <i class="fas fa-quote-left"></i> 
+                                    <p>Balancing aesthetic sophistication with functional clarity to effectively communicate technical skills, project impact, and professional value to potential collaborators and employers.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-box">
+                                <div class="info-box-title"><i class="fas fa-info-circle"></i>Strategic Purpose</div>
+                                <div class="info-box-content">
+                                    Serves as both a technical demonstration and professional introduction, showcasing development capabilities while establishing personal brand identity in the tech industry.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-features">
+                        <h3 class="features-title"><i class="fas fa-cogs"></i>Portfolio Components</h3>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-laptop-code feature-icon"></i>
+                                <div class="feature-name">Project Showcase</div>
+                                <div class="feature-desc">Detailed presentations of completed work with technical specifications</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-cogs feature-icon"></i>
+                                <div class="feature-name">Skills Matrix</div>
+                                <div class="feature-desc">Visual representation of technical competencies and proficiency levels</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-file-alt feature-icon"></i>
+                                <div class="feature-name">Experience Timeline</div>
+                                <div class="feature-desc">Chronological professional journey with key achievements and milestones</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-envelope feature-icon"></i>
+                                <div class="feature-name">Contact Integration</div>
+                                <div class="feature-desc">Multiple contact methods and professional network connections</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-links">
+                    <a href="https://ninjatech404.github.io" target="_blank" class="project-link">
+                        <i class="fas fa-external-link-alt"></i>
+                        Visit Portfolio
+                    </a>
+                    <a href="https://github.com/NinjaTech404" target="_blank" class="project-link secondary-link">
+                        <i class="fab fa-github"></i>
+                        GitHub Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GitHub CLI Tool Card -->
+        <div class="project-card">
+            <div class="project-card-border"></div>
+            
+            <div class="project-card-content">
+                <div class="project-header">
+                    <div class="project-icon-container">
+                        <i class="fas fa-terminal project-main-icon"></i>
+                    </div>
+                    
+                    <div class="project-title-section">
+                        <h2 class="project-title">GitHub CLI Tool</h2>
+                        <div class="project-subtitle">Command Line Utility for Enhanced Development Workflow</div>
+                    </div>
+                </div>
+                
+                <div class="project-content">
+                    <div class="project-description-section">
+                        <div class="project-description">
+                            <p>A powerful command-line interface tool designed to optimize GitHub operations and streamline development workflows through terminal automation and intelligent repository management.</p>
+                            
+                            <div class="blockquote-container">
+                                <div class="blockquote-title"><i class="fas fa-book"></i> Development Philosophy</div>
+                                <div class="project-blockquote">
+                                    <i class="fas fa-quote-left"></i> 
+                                    <p>Efficiency through automation—transforming complex GitHub operations into simple terminal commands that enhance productivity and reduce development friction.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-box">
+                                <div class="info-box-title"><i class="fas fa-info-circle"></i>Technical Innovation</div>
+                                <div class="info-box-content">
+                                    Implements advanced terminal interactions, GitHub API integration, and workflow automation to significantly reduce manual operations and context switching during development.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-features">
+                        <h3 class="features-title"><i class="fas fa-cogs"></i>Tool Capabilities</h3>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-bolt feature-icon"></i>
+                                <div class="feature-name">Workflow Automation</div>
+                                <div class="feature-desc">Automates repetitive GitHub operations and standard development tasks</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-code-branch feature-icon"></i>
+                                <div class="feature-name">Repository Management</div>
+                                <div class="feature-desc">Comprehensive control over repositories, branches, and pull requests</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-robot feature-icon"></i>
+                                <div class="feature-name">Intelligent Operations</div>
+                                <div class="feature-desc">Context-aware commands that adapt to project structure and workflow patterns</div>
+                            </div>
+                            
+                            <div class="feature-item">
+                                <i class="fas fa-tachometer-alt feature-icon"></i>
+                                <div class="feature-name">Performance Optimization</div>
+                                <div class="feature-desc">Reduces operation time and minimizes manual intervention requirements</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-links">
+                    <a href="https://github.com/NinjaTech404/enc" target="_blank" class="project-link">
+                        <i class="fab fa-github"></i>
+                        View Repository
+                    </a>
+                    <a href="https://github.com/NinjaTech404/enc" target="_blank" class="project-link secondary-link">
+                        <i class="fas fa-code"></i>
+                        Explore Source
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectCards = document.querySelectorAll('.project-card');
+            const projectLinks = document.querySelectorAll('.project-link');
+            const homeButton = document.querySelector('.home-button');
+            const featureItems = document.querySelectorAll('.feature-item');
+            const logoPlaceholder = document.querySelector('.logo-placeholder');
+            
+            // Enhanced card hover effects
+            projectCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const cardBorder = this.querySelector('.project-card-border');
+                    cardBorder.style.background = 'linear-gradient(135deg, #846a6a, #353b3c)';
+                    
+                    const iconContainer = this.querySelector('.project-icon-container');
+                    iconContainer.style.transform = 'scale(1.08) rotate(2deg)';
+                    iconContainer.style.borderColor = 'rgba(132, 106, 106, 0.25)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    const cardBorder = this.querySelector('.project-card-border');
+                    cardBorder.style.background = 'linear-gradient(135deg, #353b3c, #846a6a)';
+                    
+                    const iconContainer = this.querySelector('.project-icon-container');
+                    iconContainer.style.transform = 'scale(1) rotate(0deg)';
+                    iconContainer.style.borderColor = 'rgba(132, 106, 106, 0.12)';
+                });
+            });
+            
+            // Logo animation
+            logoPlaceholder.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.08) rotate(5deg)';
+            });
+            
+            logoPlaceholder.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+            
+            setInterval(() => {
+                logoPlaceholder.style.transition = 'transform 0.5s ease';
+                logoPlaceholder.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    logoPlaceholder.style.transform = 'scale(1)';
+                }, 500);
+            }, 8000);
+            
+            // Feature items hover effects
+            featureItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('.feature-icon');
+                    if(icon) {
+                        icon.style.transform = 'scale(1.3)';
+                        icon.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('.feature-icon');
+                    if(icon) {
+                        icon.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // Project icons animation
+            const projectIcons = document.querySelectorAll('.project-main-icon');
+            projectIcons.forEach((icon, index) => {
+                setInterval(() => {
+                    icon.style.transition = 'transform 0.5s ease, color 0.5s ease';
+                    icon.style.transform = 'scale(1.2)';
+                    
+                    setTimeout(() => {
+                        icon.style.transform = 'scale(1)';
+                    }, 500);
+                }, 6000 + (index * 1500));
+            });
+            
+            // Link click effects
+            projectLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    this.style.transform = 'scale(0.97)';
+                    this.style.opacity = '0.85';
+                    
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        this.style.opacity = '1';
+                    }, 300);
+                });
+            });
+            
+            // Home button interaction
+            homeButton.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px) scale(1.02)';
+            });
+            
+            homeButton.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+            
+            homeButton.addEventListener('click', function(e) {
+                this.style.transform = 'scale(0.97)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

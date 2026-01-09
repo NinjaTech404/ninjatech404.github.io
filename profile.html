@@ -35,58 +35,68 @@
             z-index: -1;
         }
         
+        /* Profile Card - Consistent with education cards */
         .profile-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 1024px;
             background-color: white;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
-            border-radius: 0;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+            border-radius: 0px;
             overflow: hidden;
             position: relative;
         }
         
         .profile-border {
-            height: 5px;
+            height: 6px;
             background: linear-gradient(135deg, #353b3c, #846a6a);
             width: 100%;
         }
         
         .profile-content {
-            padding: 50px 40px;
+            padding: 40px 35px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
         }
         
+        /* Horizontal Layout for Profile Info (Desktop) */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+            margin-bottom: 35px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .profile-image-section {
+            flex-shrink: 0;
+            position: relative;
+        }
+        
         .profile-image-container {
-            width: 220px;
-            height: 220px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             overflow: visible;
-            margin-bottom: 30px;
             border: 5px solid white;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
             position: relative;
             background: linear-gradient(135deg, #353b3c, #846a6a);
         }
         
-        .profile-image-placeholder {
+        .profile-image-container img {
             width: 100%;
             height: 100%;
+            object-fit: cover;
             border-radius: 50%;
-            background: linear-gradient(135deg, #353b3c, #846a6a);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 80px;
         }
         
         .verified-badge-overlay {
             position: absolute;
-            bottom: 5px;
-            right: 5px;
+            bottom: 10px;
+            right: 10px;
             width: 55px;
             height: 55px;
             border-radius: 50%;
@@ -97,88 +107,120 @@
             color: white;
             font-size: 26px;
             border: 5px solid white;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
             z-index: 10;
-            animation: pulse 2s infinite;
             transform: translate(15px, 15px);
         }
         
-        @keyframes pulse {
-            0% { transform: translate(15px, 15px) scale(1); }
-            50% { transform: translate(15px, 15px) scale(1.1); }
-            100% { transform: translate(15px, 15px) scale(1); }
+        .profile-info-section {
+            flex: 1;
+            text-align: left;
+            max-width: 600px;
         }
         
         .profile-name {
             color: #353b3c;
-            font-size: 36px;
+            font-size: 34px;
             font-weight: 800;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            justify-content: center;
+            gap: 12px;
         }
         
         .verified-text {
             color: #846a6a;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            margin-top: 2px;
         }
         
         .profile-title {
             color: #846a6a;
             font-size: 22px;
             font-weight: 600;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             position: relative;
-            padding-bottom: 15px;
+            padding-bottom: 12px;
+            display: inline-block;
         }
         
         .profile-title::after {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
+            left: 0;
+            width: 60px;
             height: 3px;
             background: linear-gradient(135deg, #353b3c, #846a6a);
-            border-radius: 0;
+            border-radius: 2px;
+        }
+        
+        .profile-quick-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 15px;
+        }
+        
+        .info-item i {
+            color: #846a6a;
+            width: 20px;
+            text-align: center;
         }
         
         .social-links-section {
             width: 100%;
-            margin: 40px 0;
+            margin: 30px 0;
         }
         
         .section-title {
             color: #353b3c;
             font-size: 24px;
             font-weight: 700;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            border-radius: 2px;
         }
         
         .social-links-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
             width: 100%;
-            max-width: 600px;
             margin: 0 auto;
         }
         
         .social-link-item {
             display: flex;
             align-items: center;
-            padding: 20px 25px;
+            padding: 20px 22px;
             text-decoration: none;
-            border-radius: 0;
+            border-radius: 10px;
             background-color: rgba(53, 59, 60, 0.03);
             border: 2px solid transparent;
             transition: all 0.3s ease;
@@ -186,36 +228,25 @@
             overflow: hidden;
         }
         
-        .social-link-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #353b3c, #846a6a);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-        
         .social-link-item:hover {
+            background-color: rgba(132, 106, 106, 0.05);
+            border-color: rgba(132, 106, 106, 0.2);
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(132, 106, 106, 0.2);
-            border-color: #846a6a;
-        }
-        
-        .social-link-item:hover::before {
-            opacity: 0.05;
+            box-shadow: 0 8px 20px rgba(132, 106, 106, 0.1);
         }
         
         .social-icon {
-            font-size: 28px;
-            margin-right: 20px;
+            font-size: 26px;
+            margin-right: 16px;
             width: 40px;
             text-align: center;
             z-index: 2;
             position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link-item:hover .social-icon {
+            transform: scale(1.2);
         }
         
         .social-info {
@@ -227,28 +258,21 @@
         
         .social-name {
             color: #353b3c;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             margin-bottom: 5px;
-            transition: color 0.3s ease;
         }
         
         .social-detail {
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        
-        .social-link-item:hover .social-name,
-        .social-link-item:hover .social-detail {
-            color: #353b3c;
         }
         
         .social-arrow {
-            font-size: 16px;
+            font-size: 14px;
             color: #846a6a;
-            opacity: 0.7;
+            opacity: 0.8;
             z-index: 2;
             position: relative;
             transition: all 0.3s ease;
@@ -260,15 +284,15 @@
         }
         
         .profile-description {
-            margin-top: 40px;
+            margin-top: 35px;
             color: #666;
-            font-size: 16px;
-            line-height: 1.7;
-            max-width: 600px;
+            font-size: 15px;
+            line-height: 1.6;
+            width: 100%;
             text-align: center;
-            padding: 25px;
+            padding: 22px;
             background-color: rgba(53, 59, 60, 0.02);
-            border-radius: 0;
+            border-radius: 0px;
             border-left: 4px solid #846a6a;
             position: relative;
         }
@@ -278,7 +302,7 @@
             position: absolute;
             top: 10px;
             left: 15px;
-            font-size: 60px;
+            font-size: 50px;
             color: rgba(132, 106, 106, 0.2);
             font-family: Georgia, serif;
             line-height: 1;
@@ -291,37 +315,104 @@
         
         .university-info {
             margin-top: 30px;
-            font-size: 14px;
+            font-size: 15px;
             color: #846a6a;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background-color: rgba(53, 59, 60, 0.02);
+            border-radius: 10px;
+            border: 1px solid rgba(132, 106, 106, 0.1);
+            width: 100%;
+            max-width: 800px;
         }
         
-        /* Individual Social Media Colors */
-        .email-icon { color: #D44638; }
-        .telegram-icon { color: #0088cc; }
-        .instagram-icon { background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .github-icon { color: #333; }
-        .linkedin-icon { color: #0077B5; }
+        /* Colored Social Media Icons */
+        .email-icon { color: #D44638; } /* Gmail Red */
+        .telegram-icon { color: #0088cc; } /* Telegram Blue */
+        .instagram-icon { 
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .github-icon { color: #333333; } /* GitHub Black */
+        .linkedin-icon { color: #0077B5; } /* LinkedIn Blue */
+        .portfolio-icon { color: #353b3c; } /* Portfolio Dark */
+        
+        /* LinkedIn item specific styling */
+        #linkedin-item {
+            background-color: rgba(132, 106, 106, 0.03);
+        }
+        
+        #linkedin-item .social-detail {
+            color: #846a6a;
+        }
         
         .social-alternative {
-            font-size: 16px;
+            font-size: 18px;
             color: #846a6a;
             z-index: 2;
             position: relative;
         }
         
-        /* Responsive Design */
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1100px) {
+            .profile-container {
+                max-width: 95%;
+                width: 95%;
+            }
+        }
+        
+        /* Tablet: Switch to vertical layout */
+        @media (max-width: 900px) {
+            .social-links-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            
+            .profile-content {
+                padding: 35px 30px;
+            }
+            
+            /* Switch to vertical layout for profile header */
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 25px;
+            }
+            
+            .profile-info-section {
+                text-align: center;
+                max-width: 100%;
+            }
+            
+            .profile-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .profile-quick-info {
+                align-items: center;
+            }
+            
+            .info-item {
+                justify-content: center;
+            }
+        }
+        
+        /* Small Tablet */
         @media (max-width: 768px) {
             .profile-content {
-                padding: 40px 30px;
+                padding: 30px 28px;
             }
             
             .profile-image-container {
-                width: 200px;
-                height: 200px;
+                width: 180px;
+                height: 180px;
             }
             
             .verified-badge-overlay {
@@ -333,11 +424,13 @@
             }
             
             .profile-name {
-                font-size: 32px;
+                font-size: 30px;
+                justify-content: center;
             }
             
             .verified-text {
                 font-size: 16px;
+                justify-content: center;
             }
             
             .profile-title {
@@ -346,38 +439,44 @@
             
             .social-links-grid {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 14px;
             }
             
             .social-link-item {
-                padding: 18px 22px;
+                padding: 18px 20px;
             }
             
             .profile-description {
-                padding: 22px;
-                font-size: 15px;
+                padding: 20px;
+                font-size: 14px;
+                margin-top: 25px;
             }
             
             .profile-description::before {
-                font-size: 50px;
+                font-size: 45px;
                 left: 12px;
                 top: 8px;
             }
+            
+            .university-info {
+                font-size: 14px;
+                padding: 14px 20px;
+            }
         }
         
+        /* Mobile */
         @media (max-width: 600px) {
             body {
                 padding: 15px;
             }
             
             .profile-content {
-                padding: 35px 25px;
+                padding: 28px 25px;
             }
             
             .profile-image-container {
-                width: 180px;
-                height: 180px;
-                margin-bottom: 25px;
+                width: 160px;
+                height: 160px;
             }
             
             .verified-badge-overlay {
@@ -389,60 +488,65 @@
             }
             
             .profile-name {
-                font-size: 28px;
+                font-size: 26px;
                 flex-direction: column;
-                gap: 5px;
+                gap: 6px;
             }
             
             .profile-title {
                 font-size: 18px;
-                margin-bottom: 30px;
+                margin-bottom: 18px;
             }
             
             .section-title {
                 font-size: 22px;
-                margin-bottom: 25px;
-            }
-            
-            .social-links-grid {
-                gap: 12px;
+                margin-bottom: 22px;
             }
             
             .social-link-item {
-                padding: 16px 20px;
+                padding: 16px 18px;
             }
             
             .social-icon {
                 font-size: 24px;
-                margin-right: 15px;
+                margin-right: 14px;
                 width: 35px;
             }
             
             .social-name {
-                font-size: 16px;
+                font-size: 15px;
             }
             
             .profile-description {
-                font-size: 15px;
-                padding: 20px;
-                margin-top: 30px;
+                font-size: 14px;
+                padding: 18px;
+                margin-top: 22px;
             }
             
             .profile-description::before {
-                font-size: 45px;
+                font-size: 40px;
                 left: 10px;
-                top: 5px;
+                top: 6px;
+            }
+            
+            .university-info {
+                font-size: 13px;
+                padding: 12px 16px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
             }
         }
         
-        @media (max-width: 400px) {
+        /* Small Mobile */
+        @media (max-width: 480px) {
             .profile-content {
-                padding: 30px 20px;
+                padding: 25px 22px;
             }
             
             .profile-image-container {
-                width: 160px;
-                height: 160px;
+                width: 140px;
+                height: 140px;
             }
             
             .verified-badge-overlay {
@@ -454,15 +558,15 @@
             }
             
             .profile-name {
-                font-size: 26px;
+                font-size: 24px;
             }
             
             .profile-title {
-                font-size: 17px;
+                font-size: 16px;
             }
             
             .social-link-item {
-                padding: 14px 18px;
+                padding: 14px 16px;
             }
             
             .social-icon {
@@ -471,16 +575,65 @@
             }
             
             .social-name {
-                font-size: 15px;
+                font-size: 14px;
             }
             
             .social-detail {
-                font-size: 13px;
+                font-size: 12px;
             }
             
             .profile-description {
-                padding: 18px;
+                padding: 16px;
+                font-size: 13px;
+            }
+            
+            .info-item {
                 font-size: 14px;
+            }
+        }
+        
+        /* Very Small Mobile */
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
+            
+            .profile-content {
+                padding: 22px 20px;
+            }
+            
+            .profile-image-container {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .verified-badge-overlay {
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+                border: 3px solid white;
+                transform: translate(6px, 6px);
+            }
+            
+            .profile-name {
+                font-size: 22px;
+            }
+            
+            .profile-title {
+                font-size: 15px;
+            }
+            
+            .social-link-item {
+                padding: 12px 14px;
+            }
+            
+            .profile-description {
+                padding: 14px;
+                font-size: 12.5px;
+            }
+            
+            .section-title {
+                font-size: 20px;
             }
         }
     </style>
@@ -492,30 +645,46 @@
         <div class="profile-border"></div>
         
         <div class="profile-content">
-            <div class="profile-image-container">
-                <!---
-                <div class="profile-image-placeholder">
-                    <i class="fas fa-user"></i>
-                </div>
-                --->
-                <div class="verified-badge-overlay">
-                    <i class="fas fa-check"></i>
+            <!-- Horizontal Profile Header (Desktop) -->
+            <div class="profile-header">
+                <div class="profile-image-section">
+                    <div class="profile-image-container">
+                        <img src="./photo_2026-01-05_05-54-04.jpg" alt="KADHIM SHAKIR">
+                        <div class="verified-badge-overlay">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
                 </div>
                 
-                <img src="./photo_2026-01-05_05-54-04.jpg" alt="KADHIM SHAKIR" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                
+                <div class="profile-info-section">
+                    <h1 class="profile-name">
+                        KADHIM SHAKIR
+                        <span class="verified-text">
+                            <i class="fas fa-check-circle"></i>
+                            Verified
+                        </span>
+                    </h1>
+                    
+                    <div class="profile-title">Computer Science Undergraduate</div>
+                    
+                    <div class="profile-quick-info">
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Diwaniyah, Iraq</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>University of Al-Qadisiyah</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-code"></i>
+                            <span>Full-Stack Development</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <h1 class="profile-name">
-                KADHIM SHAKIR
-                <span class="verified-text">
-                    <i class="fas fa-check-circle"></i>
-                    Verified
-                </span>
-            </h1>
-            
-            <div class="profile-title">Computer Science Undergraduate</div>
-            
+            <!-- Social Links Section -->
             <div class="social-links-section">
                 <h2 class="section-title">Connect With Me</h2>
                 
@@ -592,7 +761,7 @@
                     
                     <!-- Portfolio -->
                     <a href="https://ninjatech404.github.io" target="_blank" class="social-link-item">
-                        <div class="social-icon" style="color: #353b3c;">
+                        <div class="social-icon portfolio-icon">
                             <i class="fas fa-briefcase"></i>
                         </div>
                         <div class="social-info">
@@ -606,10 +775,12 @@
                 </div>
             </div>
             
+            <!-- Profile Description -->
             <div class="profile-description">
                 <p>Computer Science undergraduate with a passion for software development, web technologies, and problem-solving. Currently expanding skills in full-stack development while pursuing academic excellence at the University of Al-Qadisiyah.</p>
             </div>
             
+            <!-- University Info -->
             <div class="university-info">
                 <i class="fas fa-university"></i>
                 <span>University of Al-Qadisiyah - College of Computer Science & IT</span>
@@ -624,6 +795,7 @@
             const socialLinks = document.querySelectorAll('.social-link-item');
             const linkedinItem = document.getElementById('linkedin-item');
             const verifiedBadge = document.querySelector('.verified-badge-overlay');
+            const socialIcons = document.querySelectorAll('.social-icon');
             
             // Add hover effect to the profile border
             profileContainer.addEventListener('mouseenter', () => {
@@ -634,15 +806,33 @@
                 profileBorder.style.background = 'linear-gradient(135deg, #353b3c, #846a6a)';
             });
             
-            // Add click effect to social links
-            socialLinks.forEach(link => {
-                if (link.id !== 'linkedin-item') {
-                    link.addEventListener('click', function(e) {
-                        // Add a visual feedback for the click
-                        this.style.transform = 'scale(0.98)';
+            // Enhanced hover effects for social links
+            socialLinks.forEach(item => {
+                if (item.id !== 'linkedin-item') {
+                    item.addEventListener('mouseenter', function() {
+                        const icon = this.querySelector('.social-icon');
+                        if(icon) {
+                            icon.style.transform = 'scale(1.3) rotate(5deg)';
+                            icon.style.transition = 'transform 0.3s ease';
+                        }
+                    });
+                    
+                    item.addEventListener('mouseleave', function() {
+                        const icon = this.querySelector('.social-icon');
+                        if(icon) {
+                            icon.style.transform = 'scale(1) rotate(0deg)';
+                        }
+                    });
+                    
+                    item.addEventListener('click', function(e) {
+                        // Enhanced click animation
+                        this.style.transform = 'translateY(-3px) scale(0.98)';
+                        this.style.opacity = '0.9';
+                        
                         setTimeout(() => {
-                            this.style.transform = '';
-                        }, 200);
+                            this.style.transform = 'translateY(0) scale(1)';
+                            this.style.opacity = '1';
+                        }, 300);
                     });
                 }
             });
@@ -673,25 +863,25 @@
                     border-radius: 0;
                     max-width: 400px;
                     width: 90%;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
                     text-align: center;
-                    border-top: 5px solid #846a6a;
+                    border-top: 6px solid #846a6a;
                 `;
                 
                 modalContent.innerHTML = `
-                    <h3 style="color: #353b3c; margin-bottom: 15px;">LinkedIn Profile Not Available</h3>
-                    <p style="color: #666; margin-bottom: 25px; line-height: 1.6;">My LinkedIn profile is currently not available. You can try these alternatives:</p>
+                    <h3 style="color: #353b3c; margin-bottom: 15px; font-size: 20px; font-weight: 700;">LinkedIn Profile Not Available</h3>
+                    <p style="color: #666; margin-bottom: 25px; line-height: 1.6; font-size: 14px;">My LinkedIn profile is currently not available. You can try these alternatives:</p>
                     <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;">
-                        <a href="https://www.linkedin.com/search/results/people/" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #f5f7fa; border-radius: 0; text-decoration: none; color: #353b3c; font-weight: 600; transition: all 0.3s; border-left: 3px solid #846a6a;">
+                        <a href="https://www.linkedin.com/search/results/people/" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 14px; background: rgba(53, 59, 60, 0.03); border-radius: 8px; text-decoration: none; color: #353b3c; font-weight: 600; transition: all 0.3s; border: 2px solid transparent;">
                             <i class="fas fa-search" style="color: #846a6a;"></i>
                             <span>Search on LinkedIn</span>
                         </a>
-                        <a href="mailto:ninjatech404@gmail.com" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #f5f7fa; border-radius: 0; text-decoration: none; color: #353b3c; font-weight: 600; transition: all 0.3s; border-left: 3px solid #846a6a;">
+                        <a href="mailto:ninjatech404@gmail.com" style="display: flex; align-items: center; gap: 10px; padding: 14px; background: rgba(53, 59, 60, 0.03); border-radius: 8px; text-decoration: none; color: #353b3c; font-weight: 600; transition: all 0.3s; border: 2px solid transparent;">
                             <i class="fas fa-envelope" style="color: #846a6a;"></i>
                             <span>Send me an Email</span>
                         </a>
                     </div>
-                    <button id="closeModal" style="background: linear-gradient(135deg, #353b3c, #846a6a); color: white; border: none; padding: 12px 25px; border-radius: 0; font-weight: 600; cursor: pointer; transition: opacity 0.3s;">Close</button>
+                    <button id="closeModal" style="background: linear-gradient(135deg, #353b3c, #846a6a); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(132, 106, 106, 0.25);">Close</button>
                 `;
                 
                 modal.appendChild(modalContent);
@@ -717,12 +907,12 @@
             verifiedBadge.addEventListener('mouseenter', () => {
                 verifiedBadge.style.transform = 'translate(15px, 15px) scale(1.3)';
                 verifiedBadge.style.transition = 'transform 0.3s ease';
-                verifiedBadge.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.4)';
+                verifiedBadge.style.boxShadow = '0 6px 25px rgba(0, 0, 0, 0.35)';
             });
             
             verifiedBadge.addEventListener('mouseleave', () => {
                 verifiedBadge.style.transform = 'translate(15px, 15px) scale(1)';
-                verifiedBadge.style.boxShadow = '0 3px 15px rgba(0, 0, 0, 0.3)';
+                verifiedBadge.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.25)';
             });
             
             // Click effect for verified badge
@@ -733,15 +923,18 @@
                 }, 200);
             });
             
-            // Pulse animation for the profile icon
-            const profileIcon = document.querySelector('.profile-image-placeholder i');
+            // Social icon pulse animation
             setInterval(() => {
-                profileIcon.style.transition = 'transform 0.5s ease';
-                profileIcon.style.transform = 'scale(1.1)';
-                setTimeout(() => {
-                    profileIcon.style.transform = 'scale(1)';
-                }, 500);
-            }, 3000);
+                socialIcons.forEach(icon => {
+                    const originalColor = icon.style.color;
+                    icon.style.transition = 'all 0.5s ease';
+                    icon.style.filter = 'brightness(1.3)';
+                    
+                    setTimeout(() => {
+                        icon.style.filter = 'brightness(1)';
+                    }, 500);
+                });
+            }, 4000);
             
             // Rotate animation for the verified badge
             setInterval(() => {
@@ -751,6 +944,29 @@
                     verifiedBadge.style.transform = 'translate(15px, 15px) rotate(0deg)';
                 }, 500);
             }, 5000);
+            
+            // Enhanced hover effect for the entire profile container
+            profileContainer.addEventListener('mouseenter', () => {
+                profileContainer.style.transform = 'translateY(-3px)';
+                profileContainer.style.transition = 'transform 0.3s ease';
+            });
+            
+            profileContainer.addEventListener('mouseleave', () => {
+                profileContainer.style.transform = 'translateY(0)';
+            });
+            
+            // Quick info items animation
+            const infoItems = document.querySelectorAll('.info-item');
+            infoItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, 300 + (index * 100));
+            });
         });
     </script>
 </body>

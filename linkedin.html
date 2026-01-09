@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkedIn Link Not Available</title>
+    <title>LinkedIn Not Available</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -35,22 +35,25 @@
             z-index: -1;
         }
         
+        /* Smaller Card */
         .card {
             background-color: white;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+            border-radius: 0px;
             overflow: hidden;
             position: relative;
             width: 100%;
-            max-width: 450px;
-            transition: transform 0.3s ease;
+            max-width: 500px;
+            transition: all 0.3s ease;
         }
         
         .card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.15);
         }
         
         .card-border {
-            height: 5px;
+            height: 6px;
             background: linear-gradient(135deg, #353b3c, #846a6a);
             width: 100%;
         }
@@ -68,20 +71,20 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 20px;
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             position: relative;
             margin-bottom: 25px;
         }
         
         .icon-wrapper {
             position: relative;
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
         }
         
         .main-icon {
-            font-size: 70px;
+            font-size: 60px;
             background: linear-gradient(135deg, #353b3c, #846a6a);
             -webkit-background-clip: text;
             background-clip: text;
@@ -100,11 +103,11 @@
             position: absolute;
             bottom: -5px;
             right: -5px;
-            font-size: 16px;
+            font-size: 14px;
             color: white;
             background: linear-gradient(135deg, #353b3c, #846a6a);
-            width: 28px;
-            height: 28px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -116,27 +119,77 @@
         
         h1 {
             color: #353b3c;
-            font-size: 24px;
-            margin-bottom: 12px;
-            font-weight: 700;
+            font-size: 26px;
+            margin-bottom: 10px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .message {
-            color: #555;
+            color: #666;
             font-size: 16px;
             line-height: 1.5;
             margin-bottom: 25px;
-            max-width: 380px;
+            max-width: 500px;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 180px;
+        }
+        
+        .primary-btn {
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(132, 106, 106, 0.3);
+        }
+        
+        .secondary-btn {
+            background-color: #f5f7fa;
+            color: #353b3c;
+            border: 1px solid #ddd;
+        }
+        
+        .secondary-btn:hover {
+            background-color: #e8eaed;
+            transform: translateY(-3px);
+            border-color: #846a6a;
         }
         
         .alternative-options {
             width: 100%;
-            margin-top: 15px;
+            margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid #eee;
         }
         
-        .alternative-options h3 {
+        .options-title {
             color: #353b3c;
             font-size: 18px;
             margin-bottom: 18px;
@@ -167,24 +220,24 @@
         }
         
         .option i {
-            font-size: 22px;
+            font-size: 20px;
             color: #846a6a;
-            margin-right: 15px;
-            width: 30px;
+            margin-right: 12px;
+            width: 25px;
             text-align: center;
         }
         
         .option span {
             color: #353b3c;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             flex-grow: 1;
             text-align: left;
         }
         
         .option-arrow {
             color: #846a6a;
-            font-size: 14px;
+            font-size: 12px;
             opacity: 0.7;
         }
         
@@ -193,24 +246,96 @@
             font-size: 13px;
             color: #777;
             line-height: 1.5;
-            max-width: 380px;
+            max-width: 500px;
         }
         
-        @media (max-width: 500px) {
+        /* Back Home Link */
+        .home-link {
+            margin-top: 25px;
+            font-size: 14px;
+            color: #846a6a;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .home-link:hover {
+            color: #353b3c;
+        }
+        
+        @media (max-width: 650px) {
             .card-content {
                 padding: 25px 20px;
             }
             
             .main-icon {
-                font-size: 60px;
+                font-size: 50px;
             }
             
             h1 {
                 font-size: 22px;
+                flex-direction: column;
+                gap: 6px;
             }
             
             .message {
                 font-size: 15px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .action-btn {
+                max-width: 100%;
+                width: 100%;
+                padding: 14px 20px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .card-content {
+                padding: 22px 18px;
+            }
+            
+            .icon-container {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .icon-wrapper {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .main-icon {
+                font-size: 45px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            .message {
+                font-size: 14px;
+            }
+            
+            .option {
+                padding: 12px 15px;
+            }
+            
+            .option i {
+                font-size: 18px;
+                margin-right: 10px;
+            }
+            
+            .option span {
+                font-size: 13px;
             }
         }
     </style>
@@ -231,15 +356,29 @@
                 </div>
             </div>
             
-            <h1>LinkedIn Link Not Available</h1>
+            <h1>
+                LinkedIn
+                <span style="color: #846a6a; font-size: 15px; font-weight: 600;">
+                    (Currently Unavailable)
+                </span>
+            </h1>
             
             <p class="message">
                 The LinkedIn profile for this contact is currently not available. 
                 You can try the following alternatives to connect or find more information.
             </p>
             
+            <div class="action-buttons">
+                <a href="https://www.linkedin.com/search/results/people/" target="_blank" class="action-btn primary-btn">
+                    <i class="fas fa-search"></i> Search LinkedIn
+                </a>
+                <a href="https://www.linkedin.com/feed/" target="_blank" class="action-btn secondary-btn">
+                    <i class="fas fa-newspaper"></i> Browse Feed
+                </a>
+            </div>
+            
             <div class="alternative-options">
-                <h3>Alternative Options</h3>
+                <h3 class="options-title">Alternative Options</h3>
                 
                 <div class="options">
                     <a href="https://www.linkedin.com/search/results/people/" target="_blank" class="option">
@@ -266,6 +405,11 @@
                 If you have the person's name, you can search for them directly on LinkedIn 
                 using the search option above.
             </p>
+            
+            <a href="index.html" class="home-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Home</span>
+            </a>
         </div>
     </div>
 
@@ -274,6 +418,8 @@
             const card = document.querySelector('.card');
             const cardBorder = document.querySelector('.card-border');
             const options = document.querySelectorAll('.option');
+            const actionButtons = document.querySelectorAll('.action-btn');
+            const mainIcon = document.querySelector('.main-icon');
             
             // Add hover effect to the card border
             card.addEventListener('mouseenter', () => {
@@ -287,7 +433,6 @@
             // Add click effect to options
             options.forEach(option => {
                 option.addEventListener('click', function(e) {
-                    // Add a visual feedback for the click
                     this.style.transform = 'scale(0.98)';
                     setTimeout(() => {
                         this.style.transform = '';
@@ -295,8 +440,7 @@
                 });
             });
             
-            // Pulse animation for the LinkedIn icon (same as other cards)
-            const mainIcon = document.querySelector('.main-icon');
+            // Pulse animation for the LinkedIn icon
             setInterval(() => {
                 mainIcon.style.transition = 'transform 0.5s ease';
                 mainIcon.style.transform = 'scale(1.1)';
@@ -304,6 +448,17 @@
                     mainIcon.style.transform = 'scale(1)';
                 }, 500);
             }, 3000);
+            
+            // Simple button hover effects
+            actionButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
         });
     </script>
 </body>

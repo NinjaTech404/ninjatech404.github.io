@@ -35,121 +35,167 @@
             z-index: -1;
         }
         
+        /* Portfolio Card - Consistent with other cards */
         .card {
             background-color: white;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+            border-radius: 0px;
             overflow: hidden;
             position: relative;
             width: 100%;
-            max-width: 420px;
-            transition: transform 0.3s ease;
+            max-width: 1024px;
+            transition: all 0.3s ease;
         }
         
         .card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.15);
         }
         
         .card-border {
-            height: 5px;
+            height: 6px;
             background: linear-gradient(135deg, #353b3c, #846a6a);
             width: 100%;
         }
         
         .card-content {
-            padding: 35px 30px;
+            padding: 40px 35px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
         }
         
-        .icon-container {
+        /* Horizontal Layout for Header (Desktop) */
+        .card-header {
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
-            width: 100px;
-            height: 100px;
-            position: relative;
-            margin-bottom: 25px;
-        }
-        
-        .icon-wrapper {
-            position: relative;
-            width: 80px;
-            height: 80px;
-        }
-        
-        .main-icon {
-            font-size: 70px;
-            background: linear-gradient(135deg, #353b3c, #846a6a);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            position: absolute;
-            top: 0;
-            left: 0;
+            gap: 35px;
+            margin-bottom: 35px;
             width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
             justify-content: center;
         }
         
-        .status-icon {
-            position: absolute;
-            bottom: -5px;
-            right: -5px;
-            font-size: 16px;
-            color: white;
+        .portfolio-image-section {
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .portfolio-container {
+            width: 220px;
+            height: 220px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 5px solid white;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
             background: linear-gradient(135deg, #353b3c, #846a6a);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 3px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-            z-index: 2;
+            color: white;
+        }
+        
+        .portfolio-placeholder {
+            width: 180px;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+        
+        .portfolio-icon {
+            font-size: 70px;
+            color: white;
+        }
+        
+        .portfolio-text {
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            color: white;
+        }
+        
+        .portfolio-info-section {
+            flex: 1;
+            text-align: left;
+            max-width: 600px;
         }
         
         h1 {
             color: #353b3c;
-            font-size: 24px;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .profile-info {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            margin-bottom: 25px;
-            width: 100%;
+            gap: 12px;
         }
         
-        .username {
+        .available-text {
+            color: #846a6a;
+            font-size: 17px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 2px;
+        }
+        
+        .portfolio-url {
             color: #846a6a;
             font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 15px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 12px;
+            display: inline-block;
+        }
+        
+        .portfolio-url::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            border-radius: 2px;
+        }
+        
+        .portfolio-quick-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .info-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-        
-        .link-hint {
+            gap: 10px;
             color: #666;
-            font-size: 14px;
-            font-style: italic;
-            margin-top: 5px;
+            font-size: 15px;
         }
         
+        .info-item i {
+            color: #846a6a;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Action Buttons */
         .action-buttons {
             display: flex;
-            gap: 15px;
-            margin: 25px 0;
+            gap: 20px;
+            margin: 35px 0 30px;
             width: 100%;
             justify-content: center;
         }
@@ -158,133 +204,474 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            padding: 14px 25px;
+            gap: 12px;
+            padding: 16px 28px;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 600;
             font-size: 15px;
             transition: all 0.3s ease;
             flex: 1;
-            max-width: 180px;
+            max-width: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
         }
         
         .primary-btn {
             background: linear-gradient(135deg, #353b3c, #846a6a);
             color: white;
+            box-shadow: 0 4px 15px rgba(132, 106, 106, 0.25);
         }
         
         .primary-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(132, 106, 106, 0.3);
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(132, 106, 106, 0.35);
+        }
+        
+        .primary-btn:hover::before {
+            left: 100%;
         }
         
         .secondary-btn {
-            background-color: #f5f7fa;
+            background-color: white;
             color: #353b3c;
-            border: 1px solid #ddd;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
         
         .secondary-btn:hover {
-            background-color: #e8eaed;
-            transform: translateY(-3px);
+            background-color: #f5f7fa;
+            transform: translateY(-4px) scale(1.03);
             border-color: #846a6a;
+            box-shadow: 0 6px 20px rgba(132, 106, 106, 0.15);
+        }
+        
+        /* Back Home Button Styling */
+        .home-btn {
+            background: linear-gradient(135deg, #846a6a, #353b3c);
+            color: white;
+            box-shadow: 0 4px 15px rgba(53, 59, 60, 0.25);
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(53, 59, 60, 0.35);
+        }
+        
+        .home-btn:hover::before {
+            left: 100%;
         }
         
         .portfolio-features {
             width: 100%;
-            margin-top: 20px;
-            padding-top: 20px;
+            margin-top: 30px;
+            padding-top: 30px;
             border-top: 1px solid #eee;
         }
         
         .features-title {
             color: #353b3c;
-            font-size: 17px;
-            margin-bottom: 20px;
-            font-weight: 600;
+            font-size: 22px;
+            margin-bottom: 25px;
+            font-weight: 700;
+            text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        .features-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            border-radius: 2px;
         }
         
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
         }
         
         .feature-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px 10px;
-            border-radius: 8px;
-            background-color: rgba(53, 59, 60, 0.05);
+            padding: 20px 15px;
+            border-radius: 10px;
+            background-color: rgba(53, 59, 60, 0.03);
+            border: 2px solid transparent;
             transition: all 0.3s ease;
         }
         
         .feature-item:hover {
-            background-color: rgba(132, 106, 106, 0.1);
-            transform: translateY(-3px);
+            background-color: rgba(132, 106, 106, 0.05);
+            border-color: rgba(132, 106, 106, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(132, 106, 106, 0.1);
         }
         
         .feature-icon {
-            font-size: 22px;
+            font-size: 28px;
             color: #846a6a;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover .feature-icon {
+            transform: scale(1.3) rotate(5deg);
         }
         
         .feature-text {
             color: #353b3c;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
+            text-align: center;
         }
         
         .note {
-            margin-top: 20px;
-            font-size: 13px;
+            margin-top: 30px;
+            font-size: 15px;
             color: #666;
-            line-height: 1.5;
-            max-width: 380px;
+            line-height: 1.6;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            padding: 22px;
+            background-color: rgba(53, 59, 60, 0.02);
+            border-radius: 0px;
+            border-left: 4px solid #846a6a;
+            position: relative;
         }
         
-        .profile-link {
-            color: #353b3c;
+        .note::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 50px;
+            color: rgba(132, 106, 106, 0.2);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        
+        .note p {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .link-hint {
+            margin-top: 20px;
             font-size: 14px;
-            margin-top: 10px;
-            font-weight: 500;
+            color: #846a6a;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 24px;
+            background-color: rgba(53, 59, 60, 0.02);
+            border-radius: 10px;
+            border: 1px solid rgba(132, 106, 106, 0.1);
+            width: 100%;
+            max-width: 800px;
         }
         
-        @media (max-width: 480px) {
-            .card-content {
-                padding: 30px 20px;
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1100px) {
+            .card {
+                max-width: 95%;
+                width: 95%;
+            }
+        }
+        
+        /* Tablet: Switch to vertical layout */
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
             }
             
-            .main-icon {
+            .card-content {
+                padding: 35px 30px;
+            }
+            
+            /* Switch to vertical layout for card header */
+            .card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 25px;
+            }
+            
+            .portfolio-info-section {
+                text-align: center;
+                max-width: 100%;
+            }
+            
+            .portfolio-url::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .portfolio-quick-info {
+                align-items: center;
+            }
+            
+            .info-item {
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+            }
+            
+            .action-btn {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+        
+        /* Small Tablet */
+        @media (max-width: 768px) {
+            .card-content {
+                padding: 30px 28px;
+            }
+            
+            .portfolio-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .portfolio-placeholder {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .portfolio-icon {
                 font-size: 60px;
+            }
+            
+            h1 {
+                font-size: 28px;
+                justify-content: center;
+            }
+            
+            .available-text {
+                font-size: 16px;
+                justify-content: center;
+            }
+            
+            .portfolio-url {
+                font-size: 20px;
+            }
+            
+            .note {
+                padding: 20px;
+                font-size: 14px;
+                margin-top: 25px;
+            }
+            
+            .note::before {
+                font-size: 45px;
+                left: 12px;
+                top: 8px;
+            }
+            
+            .link-hint {
+                font-size: 13px;
+                padding: 14px 20px;
+            }
+        }
+        
+        /* Mobile */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            .card-content {
+                padding: 28px 25px;
+            }
+            
+            .portfolio-container {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .portfolio-placeholder {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .portfolio-icon {
+                font-size: 55px;
+            }
+            
+            .portfolio-text {
+                font-size: 12px;
+            }
+            
+            h1 {
+                font-size: 26px;
+                flex-direction: column;
+                gap: 6px;
+            }
+            
+            .portfolio-url {
+                font-size: 18px;
+                margin-bottom: 18px;
+            }
+            
+            .features-title {
+                font-size: 20px;
+                margin-bottom: 22px;
+            }
+            
+            .action-btn {
+                padding: 14px 24px;
+                font-size: 14px;
+            }
+            
+            .feature-item {
+                padding: 16px 12px;
+            }
+            
+            .feature-icon {
+                font-size: 24px;
+            }
+            
+            .note {
+                font-size: 14px;
+                padding: 18px;
+                margin-top: 22px;
+            }
+            
+            .note::before {
+                font-size: 40px;
+                left: 10px;
+                top: 6px;
+            }
+            
+            .link-hint {
+                font-size: 13px;
+                padding: 12px 16px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+        }
+        
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            .card-content {
+                padding: 25px 22px;
+            }
+            
+            .portfolio-container {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .portfolio-placeholder {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .portfolio-icon {
+                font-size: 50px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .portfolio-url {
+                font-size: 17px;
+            }
+            
+            .action-btn {
+                padding: 13px 22px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+            
+            .feature-item {
+                padding: 15px 10px;
+            }
+            
+            .note {
+                padding: 16px;
+                font-size: 13px;
+            }
+            
+            .info-item {
+                font-size: 14px;
+            }
+        }
+        
+        /* Very Small Mobile */
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
+            
+            .card-content {
+                padding: 22px 20px;
+            }
+            
+            .portfolio-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .portfolio-placeholder {
+                width: 110px;
+                height: 110px;
+            }
+            
+            .portfolio-icon {
+                font-size: 45px;
             }
             
             h1 {
                 font-size: 22px;
             }
             
-            .username {
-                font-size: 20px;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
+            .portfolio-url {
+                font-size: 16px;
             }
             
             .action-btn {
-                max-width: 100%;
-                width: 100%;
-                padding: 14px 20px;
+                padding: 12px 20px;
             }
             
-            .features-grid {
-                grid-template-columns: 1fr;
+            .note {
+                padding: 14px;
+                font-size: 12.5px;
+            }
+            
+            .features-title {
+                font-size: 18px;
             }
         }
     </style>
@@ -296,41 +683,59 @@
         <div class="card-border"></div>
         
         <div class="card-content">
-            <div class="icon-container">
-                <div class="icon-wrapper">
-                    <i class="fas fa-briefcase main-icon"></i>
-                    <div class="status-icon">
-                        <i class="fas fa-check"></i>
+            <!-- Horizontal Header with Portfolio Placeholder (Desktop) -->
+            <div class="card-header">
+                <div class="portfolio-image-section">
+                    <div class="portfolio-container">
+                        <div class="portfolio-placeholder">
+                            <i class="fas fa-briefcase portfolio-icon"></i>
+                            <div class="portfolio-text">Portfolio Website</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portfolio-info-section">
+                    <h1>
+                        Portfolio Available
+                        <span class="available-text">
+                            <i class="fas fa-check-circle"></i>
+                            Live & Active
+                        </span>
+                    </h1>
+                    
+                    <div class="portfolio-url">ninjatech404.github.io</div>
+                    
+                    <div class="portfolio-quick-info">
+                        <div class="info-item">
+                            <i class="fas fa-code"></i>
+                            <span>Showcases Projects & Technical Skills</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-laptop-code"></i>
+                            <span>Modern Web Development Portfolio</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-rocket"></i>
+                            <span>Continuously Updated with New Projects</span>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <h1>Portfolio Available</h1>
-            
-            <div class="profile-info">
-                <div class="username">
-                    <i class="fas fa-globe"></i>
-                    <span>ninjatech404.github.io</span>
-                </div>
-                
-                <div class="profile-link">
-                    Professional portfolio website
-                </div>
-                
-                <div class="link-hint">
-                    Click buttons below to explore
-                </div>
-            </div>
-            
+            <!-- Action Buttons with Back Home Button -->
             <div class="action-buttons">
                 <a href="https://ninjatech404.github.io" target="_blank" class="action-btn primary-btn">
-                    <i class="fas fa-external-link-alt"></i> Visit
+                    <i class="fas fa-external-link-alt"></i> Visit Portfolio
                 </a>
                 <a href="https://github.com/NinjaTech404" target="_blank" class="action-btn secondary-btn">
                     <i class="fab fa-github"></i> View GitHub
                 </a>
+                <a href="index.html" class="action-btn home-btn">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
             </div>
             
+            <!-- Portfolio Features -->
             <div class="portfolio-features">
                 <div class="features-title">Portfolio Features</div>
                 <div class="features-grid">
@@ -350,12 +755,35 @@
                         <i class="fas fa-envelope feature-icon"></i>
                         <span class="feature-text">Contact Info</span>
                     </div>
+                    <div class="feature-item">
+                        <i class="fas fa-palette feature-icon"></i>
+                        <span class="feature-text">Modern Design</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-mobile-alt feature-icon"></i>
+                        <span class="feature-text">Responsive Layout</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-bolt feature-icon"></i>
+                        <span class="feature-text">Fast Loading</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt feature-icon"></i>
+                        <span class="feature-text">Secure Hosting</span>
+                    </div>
                 </div>
             </div>
             
-            <p class="note">
-                This portfolio website showcases projects, skills, and professional experience. Visit to see completed work and technical capabilities.
-            </p>
+            <!-- Note -->
+            <div class="note">
+                <p>This portfolio website showcases projects, skills, and professional experience. It features a modern design with responsive layout, showcasing completed work and technical capabilities in web development and software engineering.</p>
+            </div>
+            
+            <!-- Link Hint -->
+            <div class="link-hint">
+                <i class="fas fa-mouse-pointer"></i>
+                <span>Click the portfolio URL or buttons above to explore</span>
+            </div>
         </div>
     </div>
 
@@ -363,6 +791,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             const card = document.querySelector('.card');
             const cardBorder = document.querySelector('.card-border');
+            const portfolioPlaceholder = document.querySelector('.portfolio-placeholder');
+            const portfolioUrl = document.querySelector('.portfolio-url');
+            const actionButtons = document.querySelectorAll('.action-btn');
+            const featureItems = document.querySelectorAll('.feature-item');
+            const portfolioIcon = document.querySelector('.portfolio-icon');
             
             // Add hover effect to the card border
             card.addEventListener('mouseenter', () => {
@@ -373,39 +806,167 @@
                 cardBorder.style.background = 'linear-gradient(135deg, #353b3c, #846a6a)';
             });
             
-            // Pulse animation for the portfolio icon
-            const mainIcon = document.querySelector('.main-icon');
-            setInterval(() => {
-                mainIcon.style.transition = 'transform 0.5s ease';
-                mainIcon.style.transform = 'scale(1.1)';
-                setTimeout(() => {
-                    mainIcon.style.transform = 'scale(1)';
-                }, 500);
-            }, 3000);
+            // Interactive Portfolio Placeholder
+            portfolioPlaceholder.addEventListener('mouseenter', () => {
+                portfolioPlaceholder.style.transform = 'scale(1.05)';
+                portfolioPlaceholder.style.borderColor = 'rgba(255, 255, 255, 0.6)';
+                portfolioPlaceholder.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                portfolioPlaceholder.style.transition = 'all 0.3s ease';
+            });
             
-            // Add hover effects to feature items
-            const featureItems = document.querySelectorAll('.feature-item');
+            portfolioPlaceholder.addEventListener('mouseleave', () => {
+                portfolioPlaceholder.style.transform = 'scale(1)';
+                portfolioPlaceholder.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                portfolioPlaceholder.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            });
+            
+            // Click effect for portfolio placeholder
+            portfolioPlaceholder.addEventListener('click', () => {
+                portfolioPlaceholder.style.transform = 'scale(0.95)';
+                portfolioPlaceholder.style.opacity = '0.8';
+                
+                // Show a small notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #353b3c, #846a6a);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    transform: translateX(150%);
+                    transition: transform 0.3s ease;
+                `;
+                notification.textContent = 'Redirecting to portfolio website...';
+                document.body.appendChild(notification);
+                
+                // Animate in
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 10);
+                
+                // Open portfolio in new tab
+                setTimeout(() => {
+                    window.open('https://ninjatech404.github.io', '_blank');
+                }, 500);
+                
+                // Animate out after 3 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(150%)';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+                
+                setTimeout(() => {
+                    portfolioPlaceholder.style.transform = 'scale(1)';
+                    portfolioPlaceholder.style.opacity = '1';
+                }, 200);
+            });
+            
+            // Interactive portfolio URL
+            portfolioUrl.addEventListener('mouseenter', () => {
+                portfolioUrl.style.color = '#353b3c';
+                portfolioUrl.style.transition = 'color 0.3s ease';
+            });
+            
+            portfolioUrl.addEventListener('mouseleave', () => {
+                portfolioUrl.style.color = '#846a6a';
+            });
+            
+            portfolioUrl.addEventListener('click', () => {
+                window.open('https://ninjatech404.github.io', '_blank');
+                
+                // Click animation
+                portfolioUrl.style.transform = 'scale(0.98)';
+                portfolioUrl.style.transition = 'transform 0.2s ease';
+                
+                setTimeout(() => {
+                    portfolioUrl.style.transform = 'scale(1)';
+                }, 200);
+            });
+            
+            portfolioUrl.style.cursor = 'pointer';
+            portfolioUrl.title = 'Click to visit portfolio website';
+            
+            // Enhanced action button interactions
+            actionButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px) scale(1.03)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+                
+                button.addEventListener('click', function(e) {
+                    // Enhanced click animation
+                    this.style.transform = 'translateY(-1px) scale(0.96)';
+                    this.style.opacity = '0.9';
+                    
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(0) scale(1)';
+                        this.style.opacity = '1';
+                    }, 300);
+                });
+            });
+            
+            // Enhanced feature items hover effects
             featureItems.forEach(item => {
                 item.addEventListener('mouseenter', () => {
                     const icon = item.querySelector('.feature-icon');
-                    icon.style.transform = 'scale(1.2)';
-                    icon.style.transition = 'transform 0.3s ease';
+                    if(icon) {
+                        icon.style.transform = 'scale(1.3) rotate(5deg)';
+                        icon.style.transition = 'transform 0.3s ease';
+                    }
                 });
                 
                 item.addEventListener('mouseleave', () => {
                     const icon = item.querySelector('.feature-icon');
-                    icon.style.transform = 'scale(1)';
+                    if(icon) {
+                        icon.style.transform = 'scale(1) rotate(0deg)';
+                    }
                 });
             });
             
-            // Add interaction to portfolio URL
-            const username = document.querySelector('.username');
-            username.addEventListener('click', () => {
-                window.open('https://ninjatech404.github.io', '_blank');
+            // Portfolio icon animation
+            setInterval(() => {
+                portfolioIcon.style.transition = 'transform 0.5s ease';
+                portfolioIcon.style.transform = 'rotate(15deg) scale(1.1)';
+                
+                setTimeout(() => {
+                    portfolioIcon.style.transform = 'rotate(0deg) scale(1)';
+                }, 500);
+            }, 4000);
+            
+            // Quick info items animation
+            const infoItems = document.querySelectorAll('.info-item');
+            infoItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, 300 + (index * 100));
             });
             
-            username.style.cursor = 'pointer';
-            username.title = 'Click to visit portfolio website';
+            // Feature items animation
+            featureItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 500 + (index * 50));
+            });
         });
     </script>
 </body>

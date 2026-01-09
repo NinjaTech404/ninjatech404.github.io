@@ -836,6 +836,85 @@
             color: #846a6a;
             text-decoration: underline;
         }
+        /* Project Link Styles */
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 12px;
+            transition: all 0.25s ease;
+            border: 1px solid transparent;
+        }
+
+        .project-link i {
+            font-size: 0.8rem;
+            transition: transform 0.25s ease;
+        }
+
+        .project-link:hover i {
+            transform: translateX(2px);
+        }
+
+        /* Primary Link Style with Linear Gradient (#353b3c) */
+
+        .link-primary:hover {
+            background: linear-gradient(135deg, #2a2f30 0%, #1f2324 100%);
+            border-color: #1f2324;
+            box-shadow: 0 4px 12px rgba(53, 59, 60, 0.2);
+        }
+
+
+        .link-secondary:hover {
+            background: linear-gradient(135deg, #765e5e 0%, #685252 100%);
+            border-color: #685252;
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.2);
+        }
+
+        /* Alternative Gradient Styles */
+        .link-primary {
+            background: linear-gradient(90deg, #353b3c 0%, #4a5253 100%);
+            color: white;
+            border: none;
+        }
+
+        .link-secondary {
+            background: linear-gradient(90deg, #846a6a 0%, #9c8080 100%);
+            color: white;
+            border: none;
+        }
+        .item-icon{
+            color: #685252;
+        }
+        /*moving tape*/
+        .marquee-item::before{
+            color: #d0d0d0;
+        }
+        /*stat-number*/
+        .stat-box{
+            position: relative;
+        }
+        .stat-number i{
+            color: #846a6a;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        .stat-box a{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: none;
+            top: 0;
+            left: 0;
+        }
+        /*info-value*/
+        .info-value i {
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -863,15 +942,15 @@
                     
                     <div class="credentials-box">
                         <div class="credential-item">
-                            <span class="credential-icon">🎓</span>
+                            <span class="credential-icon"><i class="fas fa-graduation-cap"></i></span>
                             <span>B.Sc. Computer Science</span>
                         </div>
                         <div class="credential-item">
-                            <span class="credential-icon">📅</span>
+                            <span class="credential-icon"><i class="fas fa-calendar-day"></i></span>
                             <span>Expected Graduation 2028</span>
                         </div>
                         <div class="credential-item">
-                            <span class="credential-icon">⭐</span>
+                            <span class="credential-icon"><i class="fas fa-sort-numeric-up"></i></span>
                             <span>GPA: 3.8/4.0</span>
                         </div>
                     </div>
@@ -887,45 +966,46 @@
             <div class="info-side">
                 <div class="info-content">
                     <div class="header-bar">
-                        <div class="institution-logo">🏫</div>
+                        <div class="institution-logo"><i class="fas fa-school"></i></div>
                         <div class="header-text">
                             <h2><a href="./uni_coll.html">Al-Qadisiyah University</a></h2>
-                            <p><a href="./uni_coll.html">CS. & IT. College - Computer Science Department</a></p>
+                            <p><a href="./uni_coll.html">CS. & IT. College - Computer Science Department <i class="fas fa-external-link-alt"></i></a></p>
                         </div>
                     </div>
 
                     <div class="section">
                         <div class="section-header">
-                            <div class="section-icon">💼</div>
+                            <div class="section-icon"><i class="fas fa-user-graduate"></i></div>
                             <div class="section-title">Academic Focus</div>
                         </div>
                         <div class="info-item">
-                            <span class="info-icon">🎯</span>
+                            <span class="info-icon"><i class="fas fa-scroll"></i></span>
                             <div class="info-text">
                                 <span class="info-label">Major</span>
-                                <span class="info-value">Computer Science</span>
+                                <span class="info-value">Computer Science.</span>
                             </div>
                         </div>
                         <div class="info-item">
-                            <span class="info-icon">📚</span>
+                            <span class="info-icon"><i class="fas fa-sitemap"></i></span>
                             <div class="info-text">
                                 <span class="info-label">Specialization</span>
-                                <span class="info-value">Computer Software & Graphic Design</span>
+                                <span class="info-value">Computer Software & Graphic Design.</span>
                             </div>
                         </div>
                         <div class="info-item">
-                            <span class="info-icon">🏆</span>
+                            <span class="info-icon"><i class="fas fa-trophy"></i></span>
                             <div class="info-text">
                                 <span class="info-label">Achievements</span>
-                                <span class="info-value">Knowledge Tournament 2025, Event Winner</span>
+                                <span class="info-value">Knowledge Tournament 2025 Event Winner.</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="stats-container">
                         <div class="stat-box">
-                            <div class="stat-number">15+</div>
+                            <div class="stat-number">15+<i class="fas fa-external-link-alt"></i></div>
                             <div class="stat-label">Projects</div>
+                            <a href="projects.html"></a>
                         </div>
                         <div class="stat-box">
                             <div class="stat-number">3</div>
@@ -948,44 +1028,48 @@
                             <div class="expertise-item">JavaScript</div>
                             <div class="expertise-item">React</div>
                             <div class="expertise-item">Node.js</div>
-                            <div class="expertise-item">SQL</div>
+                            <div class="expertise-item">SQLite</div>
                             <div class="expertise-item">Git</div>
                             <div class="expertise-item">Docker</div>
                             <div class="expertise-item">Archlinux</div>
+                            <div class="expertise-item">Adobe Illustrator</div>
+                            <div class="expertise-item">Adobe Photoshop</div>
+                            <div class="expertise-item">Canva</div>
+                            <div class="expertise-item">Firebase</div>
                         </div>
                     </div>
 
                     <div class="section">
                         <div class="section-header">
-                            <div class="section-icon">✉️</div>
+                            <div class="section-icon"><i class="fas fa-id-card"></i></div>
                             <div class="section-title">Contact Information</div>
                         </div>
                         <div class="info-item">
-                            <span class="info-icon">📧</span>
+                            <span class="info-icon"><i class="fas fa-envelope"></i></span>
                             <div class="info-text">
                                 <span class="info-label">Email</span>
-                                <span class="info-value"><a href="./email.html">ninjatech404@gmail.com</a></span>
+                                <span class="info-value"><a href="./email.html">ninjatech404@gmail.com<i class="fas fa-external-link-alt"></i></a></span>
                             </div>
                         </div>
                         <div class="info-item">
-                            <span class="info-icon">☎️</span>
+                            <span class="info-icon"><i class="fas fa-mobile-screen-button"></i></span>
                             <div class="info-text">
                                 <span class="info-label">Phone</span>
                                 <span class="info-value">+964 (780) 159-5496</span>
                             </div>
                         </div>
                         <div class="info-item">
-                            <span class="info-icon">🌐</span>
+                            <span class="info-icon"><i class="fas fa-briefcase"></i></span>
                             <div class="info-text">
                                 <span class="info-label">Portfolio</span>
-                                <span class="info-value"><a href="portfolio.html">ninjatech404.github.io</a></span>
+                                <span class="info-value"><a href="portfolio.html">ninjatech404.github.io<i class="fas fa-external-link-alt"></i></a></span>
                             </div>
                         </div>
                         <div class="info-item">
-                            <span class="info-icon">📍</span>
+                            <span class="info-icon"><i class="fas fa-map-marker-alt"></i></span>
                             <div class="info-text">
                                 <span class="info-label">Location</span>
-                                <span class="info-value">IRAQ, Al-Qadisiyah State, Al-Diwaniyah City</span>
+                                <span class="info-value"><a href="location.html">IRAQ, Al-Qadisiyah Governate, Al-Diwaniyah City<i class="fas fa-external-link-alt"></i></a></span>
                             </div>
                         </div>
                     </div>
@@ -1055,57 +1139,59 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- PROJECTS CARD -->
         <div class="card secondary-card">
             <div class="secondary-content">
                 <div class="secondary-header">
-                    <div class="secondary-icon">🚀</div>
+                    <div class="secondary-icon"><i class="fas fa-rocket"></i></div>
                     <div>
                         <div class="secondary-title">Featured Projects</div>
                         <div class="secondary-subtitle">Recent Work & Contributions</div>
                     </div>
                 </div>
-
+        
                 <div class="items-grid">
                     <div class="item-card">
-                        <div class="item-icon">🤖</div>
-                        <div class="item-title">AI Chatbot</div>
-                        <div class="item-description">Intelligent chatbot using NLP and machine learning for customer service automation.</div>
+                        <div class="item-icon"><i class="fas fa-users"></i></div>
+                        <div class="item-title">Paradox Platform</div>
+                        <div class="item-description">A knowledge-sharing hub for the Paradox team to collaborate and showcase projects.</div>
                         <div class="item-tags">
-                            <span class="item-tag">Python</span>
-                            <span class="item-tag">TensorFlow</span>
+                            <span class="item-tag">React.js</span>
+                            <span class="item-tag">Firebase</span>
                         </div>
+                        <a href="https://paradox-785a8-9c7ac.web.app/home" class="project-link link-secondary">
+                            <span>Visit Platform</span>
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
                     </div>
-
+        
                     <div class="item-card">
-                        <div class="item-icon">🌐</div>
-                        <div class="item-title">E-Commerce Platform</div>
-                        <div class="item-description">Full-stack web application with payment integration and real-time inventory.</div>
+                        <div class="item-icon"><i class="fas fa-terminal"></i></div>
+                        <div class="item-title">CLI Tools Suite</div>
+                        <div class="item-description">Command-line utilities for encrypyion, hashing and developer productivity.</div>
+                        <div class="item-tags">
+                            <span class="item-tag">Rust</span>
+                            <span class="item-tag">C++</span>
+                        </div>
+                        <a href="https://github.com/NinjaTech404/enc" class="project-link link-primary">
+                            <span>View on GitHub</span>
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+        
+                    <div class="item-card">
+                        <div class="item-icon"><i class="fas fa-store"></i></div>
+                        <div class="item-title">Web Store Platform</div>
+                        <div class="item-description">Full-featured e-commerce platform with inventory management and analytics.</div>
                         <div class="item-tags">
                             <span class="item-tag">React</span>
                             <span class="item-tag">Node.js</span>
                         </div>
-                    </div>
-
-                    <div class="item-card">
-                        <div class="item-icon">📱</div>
-                        <div class="item-title">Mobile Fitness App</div>
-                        <div class="item-description">Cross-platform fitness tracking app with personalized workout plans.</div>
-                        <div class="item-tags">
-                            <span class="item-tag">React Native</span>
-                            <span class="item-tag">Firebase</span>
-                        </div>
-                    </div>
-
-                    <div class="item-card">
-                        <div class="item-icon">📊</div>
-                        <div class="item-title">Data Visualization Tool</div>
-                        <div class="item-description">Interactive dashboard for analyzing and visualizing complex datasets.</div>
-                        <div class="item-tags">
-                            <span class="item-tag">D3.js</span>
-                            <span class="item-tag">Python</span>
-                        </div>
+                        <a href="https://alyaqeen--store.web.app/" class="project-link link-secondary">
+                            <span>See Client Store</span>
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -1115,7 +1201,7 @@
         <div class="card secondary-card">
             <div class="secondary-content">
                 <div class="secondary-header">
-                    <div class="secondary-icon">⚡</div>
+                    <div class="secondary-icon"><i class="fas fa-bolt"></i></div>
                     <div>
                         <div class="secondary-title">Skills & Interests</div>
                         <div class="secondary-subtitle">Expertise & Passions</div>
@@ -1124,7 +1210,7 @@
 
                 <div class="items-grid">
                     <div class="item-card">
-                        <div class="item-icon">💻</div>
+                        <div class="item-icon"><i class="fas fa-code"></i></div>
                         <div class="item-title">Web Development</div>
                         <div class="item-description">Building responsive and scalable web applications with modern frameworks.</div>
                         <div class="item-tags">
@@ -1133,7 +1219,7 @@
                     </div>
 
                     <div class="item-card">
-                        <div class="item-icon">🧠</div>
+                        <div class="item-icon"><i class="fas fa-brain"></i></div>
                         <div class="item-title">Machine Learning</div>
                         <div class="item-description">Developing intelligent systems and predictive models using ML algorithms.</div>
                         <div class="item-tags">
@@ -1142,7 +1228,7 @@
                     </div>
 
                     <div class="item-card">
-                        <div class="item-icon">☁️</div>
+                        <div class="item-icon"><i class="fas fa-cloud"></i></div>
                         <div class="item-title">Cloud Computing</div>
                         <div class="item-description">Deploying and managing applications on AWS, Azure, and Google Cloud.</div>
                         <div class="item-tags">
@@ -1151,7 +1237,7 @@
                     </div>
 
                     <div class="item-card">
-                        <div class="item-icon">🔒</div>
+                        <div class="item-icon"><i class="fas fa-shield-alt"></i></div>
                         <div class="item-title">Cybersecurity</div>
                         <div class="item-description">Understanding security principles and implementing secure coding practices.</div>
                         <div class="item-tags">
