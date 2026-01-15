@@ -10,9 +10,6 @@
 - **Portfolio**: [ninjatech404.github.io](https://ninjatech404.github.io)
 - **Location**: IRAQ, Al-Qadisiyah Governate, Al-Diwaniyah City
 - **GitHub**: [NinjaTech404](https://github.com/NinjaTech404)
-- **LinkedIn**: [Your LinkedIn Profile]
-- **Instagram**: [Your Instagram Profile]
-- **Telegram**: [Your Telegram Profile]
 
 ---
 
