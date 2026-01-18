@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>عداد نقاط الدومينو</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #1a1613;
+            color: #e8e6e3;
+        }
+
+        .mobile-app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            background: linear-gradient(180deg, #2a2520 0%, #1a1613 100%);
+        }
+
+        /* Header */
+        .app-header {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #3d3530 0%, #2a2520 100%);
+            padding: 16px;
+            border-bottom: 3px solid #4a3f35;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .app-title {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 800;
+            color: #d4af7a;
+            margin-bottom: 14px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .goal-card {
+            background: rgba(74, 63, 53, 0.4);
+            border-radius: 14px;
+            padding: 14px;
+            border: 2px solid #4a3f35;
+        }
+
+        .goal-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            color: #d4af7a;
+        }
+
+        .goal-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .goal-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #4a3f35;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            background: #2a2520;
+            color: #d4af7a;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            direction: ltr;
+        }
+
+        .goal-btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #8b7355 0%, #6d5d4b 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Action Bar */
+        .action-bar {
+            flex-shrink: 0;
+            padding: 12px 16px;
+            background: #2a2520;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            border-bottom: 2px solid #3d3530;
+        }
+
+        .action-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-add-player {
+            background: linear-gradient(135deg, #6d5d4b 0%, #5a4d3f 100%);
+            color: #fff;
+        }
+
+        .btn-add-round {
+            background: linear-gradient(135deg, #8b7355 0%, #6d5d4b 100%);
+            color: #fff;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #8b5555 0%, #6d4343 100%);
+            color: #fff;
+            grid-column: 1 / -1;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 12px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .players-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .player-card {
+            background: linear-gradient(135deg, #3d3530 0%, #2a2520 100%);
+            border: 2px solid #4a3f35;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            gap: 10px;
+        }
+
+        .player-name-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #4a3f35;
+            border-radius: 12px;
+            font-size: 1.05em;
+            background: #2a2520;
+            color: #d4af7a;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+        }
+
+        .player-delete-btn {
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #8b5555 0%, #6d4343 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            flex-shrink: 0;
+        }
+
+        .player-delete-btn:active {
+            transform: scale(0.95);
+        }
+
+        .player-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+            margin-bottom: 14px;
+            padding: 12px;
+            background: rgba(26, 22, 19, 0.5);
+            border-radius: 10px;
+        }
+
+        .player-score-item {
+            text-align: center;
+        }
+
+        .score-round-label {
+            font-size: 0.75em;
+            color: #8b7355;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .player-score-input {
+            width: 100%;
+            padding: 10px 6px;
+            border: 2px solid #4a3f35;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            background: #1a1613;
+            color: #fff;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            direction: ltr;
+        }
+
+        .player-total {
+            text-align: center;
+            padding: 16px;
+            background: linear-gradient(135deg, #6d5d4b 0%, #5a4d3f 100%);
+            border-radius: 12px;
+            border: 2px solid #4a3f35;
+        }
+
+        .player-total-label {
+            font-size: 0.9em;
+            color: #d4af7a;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .player-total-score {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .player-total.winner {
+            background: linear-gradient(135deg, #d4af7a 0%, #b8935f 100%);
+            animation: glow-winner 1.5s infinite;
+        }
+
+        .player-total.winner .player-total-score {
+            color: #1a1613;
+        }
+
+        .player-score-input:focus, .player-name-input:focus, .goal-input:focus {
+            outline: none;
+            border-color: #d4af7a;
+            box-shadow: 0 0 15px rgba(212, 175, 122, 0.5);
+        }
+
+        @keyframes glow-winner {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 122, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(212, 175, 122, 0.8); }
+        }
+
+        .rounds-section {
+            background: #2a2520;
+            border-radius: 16px;
+            padding: 16px;
+            border: 2px solid #3d3530;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .rounds-title {
+            text-align: center;
+            font-size: 1.15em;
+            font-weight: 700;
+            color: #d4af7a;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .round-item {
+            background: rgba(61, 53, 48, 0.6);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 2px solid #4a3f35;
+        }
+
+        .round-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .round-title {
+            font-weight: 700;
+            color: #d4af7a;
+            font-size: 1.05em;
+        }
+
+        .round-delete-btn {
+            background: #8b5555;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .round-delete-btn:active {
+            transform: scale(0.95);
+        }
+
+        .round-scores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+        }
+
+        .score-item {
+            text-align: center;
+            background: #1a1613;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #3d3530;
+        }
+
+        .score-label {
+            font-size: 0.85em;
+            color: #8b7355;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .score-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #4a3f35;
+            border-radius: 10px;
+            font-size: 1.2em;
+            text-align: center;
+            background: #2a2520;
+            color: #fff;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            direction: ltr;
+        }
+
+        .score-input:focus, .player-score-input:focus, .player-name-input:focus, .goal-input:focus {
+            outline: none;
+            border-color: #d4af7a;
+            box-shadow: 0 0 12px rgba(212, 175, 122, 0.5);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6d5d4b;
+        }
+
+        .empty-state i {
+            font-size: 3em;
+            margin-bottom: 15px;
+            opacity: 0.4;
+        }
+
+        .empty-state p {
+            font-size: 1em;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #2a2520 0%, #1a1613 100%);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 28px 20px;
+            border: 3px solid #4a3f35;
+            border-radius: 18px;
+            width: 85%;
+            max-width: 340px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content h3 {
+            color: #d4af7a;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .modal-confirm {
+            background: linear-gradient(135deg, #8b5555 0%, #6d4343 100%);
+            color: white;
+        }
+
+        .modal-cancel {
+            background: rgba(74, 63, 53, 0.5);
+            color: #d4af7a;
+            border: 2px solid #4a3f35;
+        }
+
+        .winner-modal-content {
+            background: linear-gradient(135deg, #3d3530 0%, #2a2520 100%);
+            border: 3px solid #d4af7a;
+            animation: modalBounce 0.5s ease-out;
+            padding: 36px 20px;
+        }
+
+        @keyframes modalBounce {
+            0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .winner-icon {
+            font-size: 3.5em;
+            margin-bottom: 12px;
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .winner-title {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #d4af7a;
+            margin-bottom: 12px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .winner-name {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #d4af7a;
+            margin: 16px 0;
+            text-shadow: 0 0 20px rgba(212, 175, 122, 0.6);
+        }
+
+        .winner-score {
+            font-size: 1.3em;
+            color: #e8e6e3;
+            margin: 12px 0;
+        }
+
+        .new-game-btn {
+            background: linear-gradient(135deg, #d4af7a 0%, #b8935f 100%);
+            color: #1a1613;
+            padding: 16px 28px;
+            border: none;
+            border-radius: 14px;
+            font-size: 1em;
+            font-weight: 800;
+            margin-top: 20px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 10000;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Fireworks */
+        .firework {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            z-index: 10000;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: fixed;
+            font-size: 20px;
+            z-index: 10000;
+            animation: sparkle-float 2s ease-out forwards;
+        }
+
+        @keyframes sparkle-float {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-50px) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Stars animation */
+        .star {
+            position: fixed;
+            color: #d4af7a;
+            font-size: 30px;
+            z-index: 10000;
+            animation: star-burst 1.5s ease-out forwards;
+        }
+
+        @keyframes star-burst {
+            0% {
+                transform: translate(0, 0) scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(180deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-app">
+        <!-- Header -->
+        <div class="app-header">
+            <div class="app-title">
+                <i class="fas fa-dice"></i> عداد الدومينو
+            </div>
+            
+            <div class="goal-card">
+                <div class="goal-header">
+                    <i class="fas fa-trophy"></i>
+                    <span>هدف النقاط</span>
+                </div>
+                <div class="goal-input-row">
+                    <input type="number" id="goalInput" class="goal-input" value="151" min="10" step="1">
+                    <button class="goal-btn" id="setGoalBtn">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button class="action-btn btn-add-player" id="addPlayerBtn">
+                <i class="fas fa-user-plus"></i>
+                <span>إضافة لاعب</span>
+            </button>
+            <button class="action-btn btn-add-round" id="addRoundBtn">
+                <i class="fas fa-plus-circle"></i>
+                <span>جولة جديدة</span>
+            </button>
+            <button class="action-btn btn-reset" id="resetBtn">
+                <i class="fas fa-redo"></i>
+                <span>إعادة تعيين</span>
+            </button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Players Cards -->
+            <div class="players-grid" id="playersGrid"></div>
+
+            <!-- Rounds Section -->
+            <div class="rounds-section">
+                <div class="rounds-title">
+                    <i class="fas fa-list"></i>
+                    <span>الجولات</span>
+                </div>
+                <div id="roundsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalMessage"></h3>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-cancel" id="modalCancel">
+                    <i class="fas fa-times"></i> إلغاء
+                </button>
+                <button class="modal-btn modal-confirm" id="modalConfirm">
+                    <i class="fas fa-check"></i> تأكيد
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="winnerModal" class="modal">
+        <div class="modal-content winner-modal-content">
+            <div class="winner-icon">🏆</div>
+            <div class="winner-title">مبروك الفوز!</div>
+            <div class="winner-name" id="winnerName"></div>
+            <div class="winner-score" id="winnerScore"></div>
+            <button class="new-game-btn" id="closeWinnerBtn">
+                <i class="fas fa-play"></i> لعبة جديدة
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let players = [];
+        let rounds = [];
+        let goalScore = 151;
+        let gameEnded = false;
+
+        // Load data from memory state
+        function loadData() {
+            const state = {
+                players: players,
+                rounds: rounds,
+                goalScore: goalScore,
+                gameEnded: gameEnded
+            };
+            
+            players = state.players.length > 0 ? state.players : ['لاعب 1', 'لاعب 2'];
+            rounds = state.rounds || [];
+            goalScore = state.goalScore || 151;
+            gameEnded = state.gameEnded || false;
+            
+            document.getElementById('goalInput').value = goalScore;
+        }
+
+        // Save data to memory state
+        function saveData() {
+            // Data is already in memory, no need to save
+        }
+
+        function initGame() {
+            players = ['لاعب 1', 'لاعب 2'];
+            rounds = [];
+            goalScore = 151;
+            gameEnded = false;
+            document.getElementById('goalInput').value = goalScore;
+            saveData();
+            render();
+        }
+
+        function showModal(message, callback) {
+            const modal = document.getElementById('confirmModal');
+            document.getElementById('modalMessage').textContent = message;
+            modal.style.display = 'block';
+
+            document.getElementById('modalConfirm').onclick = function() {
+                modal.style.display = 'none';
+                callback(true);
+            };
+
+            document.getElementById('modalCancel').onclick = function() {
+                modal.style.display = 'none';
+                callback(false);
+            };
+        }
+
+        function createConfetti() {
+            const colors = ['#d4af7a', '#8b7355', '#6d5d4b', '#b8935f', '#ffd700', '#ff6b6b'];
+            
+            // Confetti rain
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animation = 'confetti-fall ' + (2 + Math.random() * 2) + 's linear';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+
+            // Fireworks bursts
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createFirework();
+                }, i * 500);
+            }
+
+            // Sparkles
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createSparkle();
+                }, i * 100);
+            }
+
+            // Star burst from center
+            setTimeout(() => {
+                createStarBurst();
+            }, 200);
+        }
+
+        function createFirework() {
+            const x = 20 + Math.random() * 60;
+            const y = 20 + Math.random() * 60;
+            const color = ['#ffd700', '#ff6b6b', '#d4af7a', '#00ff88', '#4ecdc4'][Math.floor(Math.random() * 5)];
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework';
+                particle.style.left = x + '%';
+                particle.style.top = y + '%';
+                particle.style.background = color;
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 50 + Math.random() * 100;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.animation = 'explode 1s ease-out forwards';
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.transform = `translate(${tx}px, ${ty}px)`;
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.textContent = ['✨', '⭐', '💫', '🌟'][Math.floor(Math.random() * 4)];
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 2000);
+        }
+
+        function createStarBurst() {
+            for (let i = 0; i < 12; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.textContent = '⭐';
+                star.style.left = '50%';
+                star.style.top = '50%';
+                
+                const angle = (Math.PI * 2 * i) / 12;
+                const distance = 150;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                star.style.setProperty('--tx', tx + 'px');
+                star.style.setProperty('--ty', ty + 'px');
+                
+                document.body.appendChild(star);
+                setTimeout(() => star.remove(), 1500);
+            }
+        }
+
+        function checkWinner() {
+            if (gameEnded) return;
+            
+            for (let p = 0; p < players.length; p++) {
+                const total = calculateTotal(p);
+                if (total >= goalScore) {
+                    gameEnded = true;
+                    showWinnerModal(players[p], total);
+                    return;
+                }
+            }
+        }
+
+        function showWinnerModal(winnerName, score) {
+            const modal = document.getElementById('winnerModal');
+            document.getElementById('winnerName').textContent = winnerName;
+            document.getElementById('winnerScore').textContent = 'النقاط النهائية: ' + score;
+            modal.style.display = 'block';
+            createConfetti();
+
+            document.getElementById('closeWinnerBtn').onclick = function() {
+                modal.style.display = 'none';
+                initGame();
+            };
+        }
+
+        function setGoal() {
+            const value = parseInt(document.getElementById('goalInput').value);
+            if (value && value >= 10) {
+                goalScore = value;
+                saveData();
+                showModal('تم تعيين هدف النقاط إلى ' + goalScore, function() {});
+            } else {
+                showModal('الرجاء إدخال رقم صحيح (10 أو أكثر)', function() {});
+            }
+        }
+
+        function addPlayer() {
+            if (gameEnded) {
+                showModal('اللعبة انتهت! ابدأ لعبة جديدة', function() {});
+                return;
+            }
+            players.push('لاعب ' + (players.length + 1));
+            rounds.forEach(r => r.push(0));
+            saveData();
+            render();
+        }
+
+        function removePlayer(index) {
+            if (players.length <= 1) {
+                showModal('يجب أن يكون هناك لاعب واحد على الأقل!', function() {});
+                return;
+            }
+            showModal('هل تريد حذف ' + players[index] + '؟', function(confirmed) {
+                if (confirmed) {
+                    players.splice(index, 1);
+                    rounds.forEach(r => r.splice(index, 1));
+                    saveData();
+                    render();
+                }
+            });
+        }
+
+        function addRound() {
+            if (gameEnded) {
+                showModal('اللعبة انتهت! ابدأ لعبة جديدة', function() {});
+                return;
+            }
+            rounds.push(new Array(players.length).fill(0));
+            saveData();
+            render();
+        }
+
+        function removeRound(index) {
+            showModal('هل تريد حذف الجولة ' + (index + 1) + '؟', function(confirmed) {
+                if (confirmed) {
+                    rounds.splice(index, 1);
+                    saveData();
+                    render();
+                    checkWinner();
+                }
+            });
+        }
+
+        function updatePlayerName(index, name) {
+            players[index] = name || 'لاعب ' + (index + 1);
+            saveData();
+        }
+
+        function updateScore(playerIndex, roundIndex, value) {
+            if (gameEnded) {
+                showModal('اللعبة انتهت! ابدأ لعبة جديدة', function() {});
+                render();
+                return;
+            }
+            rounds[roundIndex][playerIndex] = parseInt(value) || 0;
+            saveData();
+            render();
+            checkWinner();
+        }
+
+        function calculateTotal(playerIndex) {
+            return rounds.reduce((sum, round) => sum + (round[playerIndex] || 0), 0);
+        }
+
+        function render() {
+            renderPlayers();
+            renderRounds();
+        }
+
+        function renderPlayers() {
+            const grid = document.getElementById('playersGrid');
+            grid.innerHTML = '';
+            
+            players.forEach((player, i) => {
+                const total = calculateTotal(i);
+                const isWinner = total >= goalScore && gameEnded;
+                
+                // Build scores grid for this player
+                let scoresHTML = '';
+                if (rounds.length > 0) {
+                    rounds.forEach((round, r) => {
+                        scoresHTML += `
+                            <div class="player-score-item">
+                                <div class="score-round-label">ج${r + 1}</div>
+                                <input type="number" class="player-score-input" value="${round[i] || 0}" 
+                                       onchange="updateScore(${i}, ${r}, this.value)">
+                            </div>
+                        `;
+                    });
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'player-card';
+                card.innerHTML = `
+                    <div class="player-header">
+                        <button class="player-delete-btn" onclick="removePlayer(${i})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <input type="text" class="player-name-input" value="${player}" 
+                               onchange="updatePlayerName(${i}, this.value)" 
+                               placeholder="اسم اللاعب">
+                    </div>
+                    ${rounds.length > 0 ? `<div class="player-scores-grid">${scoresHTML}</div>` : ''}
+                    <div class="player-total ${isWinner ? 'winner' : ''}">
+                        <div class="player-total-label">
+                            <i class="fas fa-calculator"></i> المجموع الكلي
+                        </div>
+                        <div class="player-total-score">${total} ${isWinner ? '👑' : ''}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderRounds() {
+            const list = document.getElementById('roundsList');
+            
+            if (rounds.length === 0) {
+                list.innerHTML = '<div class="empty-state"><i class="fas fa-dice-d6"></i><p>لا توجد جولات بعد<br>اضغط "جولة جديدة" للبدء</p></div>';
+                return;
+            }
+            
+            list.innerHTML = '<div style="text-align: center; color: #8b7355; font-size: 0.9em; margin-bottom: 10px;">ملخص الجولات</div>';
+            rounds.forEach((round, r) => {
+                const item = document.createElement('div');
+                item.className = 'round-item';
+                
+                let scoresHTML = '';
+                players.forEach((player, p) => {
+                    scoresHTML += `
+                        <div class="score-item">
+                            <div class="score-label">${player}</div>
+                            <div style="font-size: 1.3em; font-weight: 800; color: #d4af7a;">${round[p] || 0}</div>
+                        </div>
+                    `;
+                });
+                
+                item.innerHTML = `
+                    <div class="round-header">
+                        <div class="round-title">
+                            <i class="fas fa-gamepad"></i> جولة ${r + 1}
+                        </div>
+                        <button class="round-delete-btn" onclick="removeRound(${r})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="round-scores">${scoresHTML}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function resetGame() {
+            showModal('هل أنت متأكد من إعادة تعيين اللعبة بالكامل؟', function(confirmed) {
+                if (confirmed) {
+                    initGame();
+                }
+            });
+        }
+
+        document.getElementById('addPlayerBtn').addEventListener('click', addPlayer);
+        document.getElementById('addRoundBtn').addEventListener('click', addRound);
+        document.getElementById('resetBtn').addEventListener('click', resetGame);
+        document.getElementById('setGoalBtn').addEventListener('click', setGoal);
+
+        // Load saved data and initialize
+        loadData();
+        render();
+    </script>
+</body>
+</html>
