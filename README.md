@@ -5,7 +5,7 @@
 ---
 
 ## 📍 Contact Information
-- **Email**: [ninjatech404@gmail.com](mailto:ninjatech404@gmail.com)
+- **Email**: [kadhimshakir@yahoo.com](mailto:kadhimshakir@yahoo.com)
 - **Phone**: +964 (780) 159-5496
 - **Portfolio**: [ninjatech404.github.io](https://ninjatech404.github.io)
 - **Location**: IRAQ, Al-Qadisiyah Governate, Al-Diwaniyah City
