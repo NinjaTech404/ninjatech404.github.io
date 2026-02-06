@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Composer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e8eaed 0%, #d0d2d5 100%);
+            background-attachment: fixed;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 12px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(100, 100, 100, 0.03) 19px, rgba(100, 100, 100, 0.03) 20px),
+                repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(100, 100, 100, 0.03) 19px, rgba(100, 100, 100, 0.03) 20px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .email-container {
+            width: 100%;
+            max-width: 700px;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: #f8f8f8;
+            border: 1px solid #c6c7c4;
+            box-shadow: 0 12px 32px rgba(53, 59, 60, 0.18), 0 0 40px rgba(132, 106, 106, 0.08);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(198, 199, 196, 0.02) 25%, rgba(198, 199, 196, 0.02) 26%, transparent 27%, transparent 74%, rgba(198, 199, 196, 0.02) 75%, rgba(198, 199, 196, 0.02) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(198, 199, 196, 0.02) 25%, rgba(198, 199, 196, 0.02) 26%, transparent 27%, transparent 74%, rgba(198, 199, 196, 0.02) 75%, rgba(198, 199, 196, 0.02) 76%, transparent 77%, transparent);
+            background-size: 40px 40px;
+            pointer-events: none;
+            border-radius: 2px;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #353b3c 0%, #846a6a 50%, #353b3c 100%);
+            z-index: 10;
+        }
+
+        .quality-indicator {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 8px;
+            height: 8px;
+            background: #00aa00;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0, 170, 0, 0.6);
+            animation: pulse 2s infinite;
+            z-index: 15;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(0, 170, 0, 0.6); }
+            50% { box-shadow: 0 0 16px rgba(0, 170, 0, 0.8); }
+        }
+
+        .email-content {
+            padding: 35px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #eef0f2;
+        }
+
+        .header-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #353b3c, #846a6a);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #eef0f2;
+            font-size: 28px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.2);
+            border: 1px solid rgba(198, 199, 196, 0.3);
+            position: relative;
+        }
+
+        .header-icon::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            border-radius: 4px;
+        }
+
+        .header-text h1 {
+            font-size: 20px;
+            color: #353b3c;
+            margin-bottom: 3px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .header-text p {
+            font-size: 12px;
+            color: #846a6a;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #353b3c;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 10px;
+        }
+
+        .label-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #846a6a, #a2999e);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 11px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #353b3c;
+            background: white;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #846a6a;
+            box-shadow: 0 0 0 3px rgba(132, 106, 106, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: linear-gradient(135deg, #f5f5f5, #f0f0f0);
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #846a6a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .toolbar-btn:hover {
+            background: #846a6a;
+            color: white;
+            border-color: #846a6a;
+            transform: translateY(-1px);
+        }
+
+        .toolbar-btn i {
+            font-size: 10px;
+        }
+
+        .toggle-preview {
+            background: linear-gradient(135deg, #f5f5f5, #f0f0f0);
+            border: 1px solid #d0d0d0;
+        }
+
+        .toggle-preview:hover {
+            background: linear-gradient(135deg, #ebebeb, #e5e5e5);
+            color: #353b3c;
+        }
+
+        .preview-content {
+            color: #353b3c;
+            line-height: 1.6;
+        }
+
+        .preview-content h1,
+        .preview-content h2,
+        .preview-content h3,
+        .preview-content h4,
+        .preview-content h5,
+        .preview-content h6 {
+            color: #353b3c;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .preview-content h1 {
+            font-size: 28px;
+            border-bottom: 3px solid #846a6a;
+            padding-bottom: 10px;
+        }
+
+        .preview-content h2 {
+            font-size: 24px;
+            border-bottom: 2px solid #a2999e;
+            padding-bottom: 8px;
+        }
+
+        .preview-content h3 {
+            font-size: 20px;
+            color: #846a6a;
+        }
+
+        .preview-content h4 {
+            font-size: 18px;
+        }
+
+        .preview-content h5 {
+            font-size: 16px;
+        }
+
+        .preview-content h6 {
+            font-size: 14px;
+        }
+
+        .preview-content p {
+            margin-bottom: 14px;
+            line-height: 1.7;
+        }
+
+        .preview-content strong {
+            font-weight: 700;
+            color: #353b3c;
+        }
+
+        .preview-content em {
+            font-style: italic;
+            color: #846a6a;
+        }
+
+        .preview-content code {
+            background: linear-gradient(135deg, rgba(132, 106, 106, 0.08), rgba(162, 153, 158, 0.05));
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 13px;
+            color: #846a6a;
+            border: 1px solid rgba(132, 106, 106, 0.15);
+        }
+
+        .preview-content pre {
+            background: linear-gradient(135deg, rgba(53, 59, 60, 0.05), rgba(132, 106, 106, 0.03));
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 16px 0;
+            border: 1px solid rgba(198, 199, 196, 0.3);
+            box-shadow: inset 0 2px 4px rgba(53, 59, 60, 0.05);
+        }
+
+        .preview-content pre code {
+            background: none;
+            padding: 0;
+            border: none;
+            color: #353b3c;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .preview-content ul,
+        .preview-content ol {
+            margin-left: 24px;
+            margin-bottom: 14px;
+        }
+
+        .preview-content li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        .preview-content blockquote {
+            border-left: 4px solid #846a6a;
+            padding: 16px 20px 16px 50px;
+            margin: 16px 0;
+            background: linear-gradient(90deg, rgba(132, 106, 106, 0.08), rgba(132, 106, 106, 0.02));
+            border-radius: 8px;
+            color: #353b3c;
+            font-style: normal;
+            position: relative;
+        }
+
+        .preview-content blockquote::before {
+            content: '"';
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            font-size: 36px;
+            color: rgba(132, 106, 106, 0.25);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .preview-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .preview-content .callout {
+            padding: 16px 20px 16px 50px;
+            margin: 16px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+            position: relative;
+            font-style: normal;
+        }
+
+        .preview-content .callout::before {
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .preview-content .callout-note {
+            border-left-color: #3498db;
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.12), rgba(52, 152, 219, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-note::before {
+            content: '\f05a';
+            color: #3498db;
+        }
+
+        .preview-content .callout-tip {
+            border-left-color: #27ae60;
+            background: linear-gradient(90deg, rgba(39, 174, 96, 0.12), rgba(39, 174, 96, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-tip::before {
+            content: '\f0eb';
+            color: #27ae60;
+        }
+
+        .preview-content .callout-warning {
+            border-left-color: #f39c12;
+            background: linear-gradient(90deg, rgba(243, 156, 18, 0.12), rgba(243, 156, 18, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-warning::before {
+            content: '\f071';
+            color: #f39c12;
+        }
+
+        .preview-content .callout-error,
+        .preview-content .callout-danger {
+            border-left-color: #e74c3c;
+            background: linear-gradient(90deg, rgba(231, 76, 60, 0.12), rgba(231, 76, 60, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-error::before,
+        .preview-content .callout-danger::before {
+            content: '\f06a';
+            color: #e74c3c;
+        }
+
+        .preview-content .callout-abstract,
+        .preview-content .callout-summary {
+            border-left-color: #9b59b6;
+            background: linear-gradient(90deg, rgba(155, 89, 182, 0.12), rgba(155, 89, 182, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-abstract::before,
+        .preview-content .callout-summary::before {
+            content: '\f0c5';
+            color: #9b59b6;
+        }
+
+        .preview-content .callout-info {
+            border-left-color: #16a085;
+            background: linear-gradient(90deg, rgba(22, 160, 133, 0.12), rgba(22, 160, 133, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-info::before {
+            content: '\f129';
+            color: #16a085;
+        }
+
+        .preview-content .callout-success {
+            border-left-color: #2ecc71;
+            background: linear-gradient(90deg, rgba(46, 204, 113, 0.12), rgba(46, 204, 113, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-success::before {
+            content: '\f00c';
+            color: #2ecc71;
+        }
+
+        .preview-content .callout-question,
+        .preview-content .callout-help {
+            border-left-color: #e67e22;
+            background: linear-gradient(90deg, rgba(230, 126, 34, 0.12), rgba(230, 126, 34, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-question::before,
+        .preview-content .callout-help::before {
+            content: '\f128';
+            color: #e67e22;
+        }
+
+        .preview-content .callout-example {
+            border-left-color: #8e44ad;
+            background: linear-gradient(90deg, rgba(142, 68, 173, 0.12), rgba(142, 68, 173, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-example::before {
+            content: '\f0ce';
+            color: #8e44ad;
+        }
+
+        .preview-content .callout-quote {
+            border-left-color: #95a5a6;
+            background: linear-gradient(90deg, rgba(149, 165, 166, 0.12), rgba(149, 165, 166, 0.03));
+            color: #2c3e50;
+        }
+
+        .preview-content .callout-quote::before {
+            content: '\f10d';
+            color: #95a5a6;
+        }
+
+        .preview-content a {
+            color: #846a6a;
+            text-decoration: underline;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .preview-content a:hover {
+            color: #353b3c;
+        }
+
+        .preview-content hr {
+            border: none;
+            border-top: 2px solid #eef0f2;
+            margin: 24px 0;
+        }
+
+        .preview-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e5e5e5;
+        }
+
+        .preview-content th {
+            background: linear-gradient(135deg, #846a6a, #a2999e);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .preview-content td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eef0f2;
+        }
+
+        .preview-content tr:last-child td {
+            border-bottom: none;
+        }
+
+        .preview-content tr:nth-child(even) {
+            background: rgba(132, 106, 106, 0.03);
+        }
+
+        .preview-content .math-inline {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.08), rgba(155, 89, 182, 0.03));
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Times New Roman', serif;
+            border: 1px solid rgba(155, 89, 182, 0.15);
+            color: #8e44ad;
+            font-style: italic;
+        }
+
+        .preview-content .math-block {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.08), rgba(155, 89, 182, 0.03));
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-family: 'Times New Roman', serif;
+            border: 1px solid rgba(155, 89, 182, 0.2);
+            overflow-x: auto;
+            text-align: center;
+            font-size: 16px;
+            color: #8e44ad;
+        }
+
+        .preview-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(53, 59, 60, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: #f8f8f8;
+            border: 1px solid #c6c7c4;
+            border-radius: 2px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(53, 59, 60, 0.3);
+            animation: slideInModal 0.4s ease;
+        }
+
+        @keyframes slideInModal {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #353b3c 0%, #846a6a 50%, #353b3c 100%);
+        }
+
+        .modal-header {
+            padding: 24px 30px;
+            border-bottom: 2px solid #eef0f2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #f5f5f5, #f0f0f0);
+            flex-shrink: 0;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #353b3c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-body {
+            padding: 30px;
+            background: white;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 2px solid #eef0f2;
+            background: linear-gradient(135deg, #f5f5f5, #f0f0f0);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            flex-shrink: 0;
+        }
+
+        .confirm-dialog {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(53, 59, 60, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(6px);
+        }
+
+        .confirm-dialog.active {
+            display: flex;
+        }
+
+        .confirm-box {
+            background: #f8f8f8;
+            border: 1px solid #c6c7c4;
+            border-radius: 6px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(53, 59, 60, 0.4);
+            animation: slideInModal 0.3s ease;
+            position: relative;
+        }
+
+        .confirm-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #846a6a 0%, #a2999e 50%, #846a6a 100%);
+        }
+
+        .confirm-header {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #eef0f2;
+        }
+
+        .confirm-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #846a6a, #a2999e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .confirm-message {
+            flex: 1;
+            font-size: 15px;
+            color: #353b3c;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .confirm-buttons {
+            padding: 20px 24px;
+            display: flex;
+            gap: 12px;
+            background: linear-gradient(135deg, #f5f5f5, #f0f0f0);
+        }
+
+        .btn-confirm {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-confirm-yes {
+            background: linear-gradient(90deg, #353b3c 0%, #4a5253 100%);
+            color: white;
+        }
+
+        .btn-confirm-yes:hover {
+            background: linear-gradient(135deg, #2a2f30 0%, #1f2324 100%);
+            box-shadow: 0 4px 12px rgba(53, 59, 60, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-confirm-no {
+            background: white;
+            color: #846a6a;
+            border: 1px solid #846a6a;
+        }
+
+        .btn-confirm-no:hover {
+            background: #846a6a;
+            color: white;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        /* 修改卡片按钮颜色以匹配主题色但有所不同 */
+        .btn-send {
+            background: linear-gradient(135deg, #353b3c 0%, #4a5253 100%);
+            color: white;
+        }
+
+        .btn-send:hover {
+            background: linear-gradient(135deg, #2a2f30 0%, #1f2324 100%);
+            box-shadow: 0 4px 12px rgba(53, 59, 60, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #846a6a 0%, #a2999e 100%);
+            color: white;
+        }
+
+        .btn-export:hover {
+            background: linear-gradient(135deg, #765e5e 0%, #8c7d83 100%);
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-visit {
+            background: linear-gradient(135deg, #353b3c 0%, #846a6a 100%);
+            color: white;
+        }
+
+        .btn-visit:hover {
+            background: linear-gradient(135deg, #2a2f30 0%, #765e5e 100%);
+            box-shadow: 0 4px 12px rgba(53, 59, 60, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #a2999e 0%, #846a6a 100%);
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: linear-gradient(135deg, #8c7d83 0%, #765e5e 100%);
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #846a6a;
+            border: 1px solid #846a6a;
+        }
+
+        .btn-secondary:hover {
+            background: #846a6a;
+            color: white;
+        }
+
+        .btn-outline {
+            background: linear-gradient(90deg, #846a6a 0%, #9c8080 100%);
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: linear-gradient(135deg, #765e5e 0%, #685252 100%);
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #353b3c 0%, #4a5253 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2a2f30 0%, #1f2324 100%);
+            box-shadow: 0 4px 12px rgba(53, 59, 60, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-top: 16px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: flex;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: flex;
+        }
+
+        .markdown-help {
+            font-size: 10px;
+            color: #a2999e;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Loading Spinner with Animated Email */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(53, 59, 60, 0.95);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            text-align: center;
+        }
+
+        .email-icon-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+
+        .animated-email {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #846a6a, #a2999e);
+            border-radius: 8px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            animation: emailBounce 1s ease-in-out infinite;
+            box-shadow: 0 4px 12px rgba(132, 106, 106, 0.4);
+        }
+
+        @keyframes emailBounce {
+            0%, 100% {
+                transform: translate(-50%, -50%) translateY(0px);
+            }
+            50% {
+                transform: translate(-50%, -50%) translateY(-10px);
+            }
+        }
+
+        .email-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #846a6a;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 2s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            top: 20%;
+            right: 15%;
+            animation-delay: 0.3s;
+        }
+
+        .particle:nth-child(3) {
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 0.6s;
+        }
+
+        .particle:nth-child(4) {
+            bottom: 10%;
+            right: 20%;
+            animation-delay: 0.9s;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% {
+                opacity: 0;
+                transform: translateY(0);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(-20px);
+            }
+        }
+
+        .loading-text {
+            color: #eef0f2;
+            font-size: 16px;
+            font-weight: 600;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Export Modal */
+        .export-modal {
+            background: #f8f8f8;
+            border: 1px solid #c6c7c4;
+            border-radius: 2px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(53, 59, 60, 0.3);
+            animation: slideInModal 0.4s ease;
+        }
+
+        .export-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #353b3c 0%, #846a6a 50%, #353b3c 100%);
+        }
+
+        .export-options {
+            padding: 30px;
+            background: white;
+        }
+
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .export-item {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .export-btn-large {
+            padding: 24px;
+            background: linear-gradient(135deg, #f5f5f5, #f0f0f0);
+            border: 2px solid #d0d0d0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .export-btn-large:hover {
+            background: linear-gradient(135deg, #846a6a, #a2999e);
+            border-color: #846a6a;
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(132, 106, 106, 0.4);
+        }
+
+        .export-btn-large:hover .export-icon {
+            color: white;
+        }
+
+        .export-btn-large:hover .export-label {
+            color: white;
+        }
+
+        .export-icon {
+            font-size: 48px;
+            color: #846a6a;
+            margin-bottom: 12px;
+            transition: color 0.3s ease;
+        }
+
+        .export-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #353b3c;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            transition: color 0.3s ease;
+        }
+
+        .export-control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .export-control-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #846a6a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .export-select {
+            padding: 10px 14px;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #353b3c;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .export-select:focus {
+            outline: none;
+            border-color: #846a6a;
+            box-shadow: 0 0 0 3px rgba(132, 106, 106, 0.1);
+        }
+
+        .hidden-file-input {
+            display: none;
+        }
+
+        /* Image Badge */
+        .image-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin: 2px;
+            cursor: default;
+        }
+
+        .image-badge i {
+            font-size: 10px;
+        }
+
+        @media (max-width: 767px) {
+            .email-content {
+                padding: 20px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .editor-toolbar {
+                gap: 6px;
+            }
+
+            .toolbar-btn {
+                padding: 8px 10px;
+                font-size: 10px;
+            }
+
+            .export-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* LaTeX Helper Menu */
+        .latex-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            padding: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+            max-width: 300px;
+        }
+
+        .latex-menu.active {
+            display: block;
+        }
+
+        .latex-item {
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .latex-item:hover {
+            background: #f0f0f0;
+        }
+
+        .latex-syntax {
+            font-family: 'Courier New', monospace;
+            color: #846a6a;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="card">
+            <div class="quality-indicator"></div>
+            
+            <div class="email-content">
+                <div class="header-section">
+                    <div class="header-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="header-text">
+                        <h1>Email Composer</h1>
+                        <p>Compose & Send Professional Messages</p>
+                    </div>
+                </div>
+
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon"><i class="fas fa-heading"></i></span>
+                            Subject
+                        </label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            id="emailSubject" 
+                            placeholder="Email subject line"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon"><i class="fas fa-file-alt"></i></span>
+                            Message Content
+                        </label>
+                        
+                        <div class="editor-toolbar">
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('**', '**')" title="Bold">
+                                <i class="fas fa-bold"></i> Bold
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('*', '*')" title="Italic">
+                                <i class="fas fa-italic"></i> Italic
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('`', '`')" title="Code">
+                                <i class="fas fa-code"></i> Code
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('\n### ', '')" title="Heading">
+                                <i class="fas fa-heading"></i> H3
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('\n- ', '')" title="Bullet List">
+                                <i class="fas fa-list-ul"></i> Bullet
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('\n1. ', '')" title="Numbered List">
+                                <i class="fas fa-list-ol"></i> Number
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('[', '](url)')" title="Link">
+                                <i class="fas fa-link"></i> Link
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('\n> ', '')" title="Quote">
+                                <i class="fas fa-quote-left"></i> Quote
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="toggleLatexMenu(event)" title="LaTeX Symbols">
+                                <i class="fas fa-square-root-alt"></i> LaTeX
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertImage()" title="Insert Image">
+                                <i class="fas fa-image"></i> Image
+                            </button>
+                            <button type="button" class="toolbar-btn toggle-preview" onclick="openPreviewPopup()" title="Preview in Popup">
+                                <i class="fas fa-eye"></i> Preview
+                            </button>
+                        </div>
+
+                        <!-- LaTeX Menu -->
+                        <div class="latex-menu" id="latexMenu">
+                            <div class="latex-item" onclick="insertLatex('\\frac{a}{b}')">
+                                <span>Fraction</span>
+                                <span class="latex-syntax">\\frac{a}{b}</span>
+                            </div>
+                            <div class="latex-item" onclick="insertLatex('x^2')">
+                                <span>Superscript</span>
+                                <span class="latex-syntax">x^2</span>
+                            </div>
+                            <div class="latex-item" onclick="insertLatex('x_i')">
+                                <span>Subscript</span>
+                                <span class="latex-syntax">x_i</span>
+                            </div>
+                            <div class="latex-item" onclick="insertLatex('\\sqrt{x}')">
+                                <span>Square Root</span>
+                                <span class="latex-syntax">\\sqrt{x}</span>
+                            </div>
+                            <div class="latex-item" onclick="insertLatex('\\sum_{i=1}^{n}')">
+                                <span>Summation</span>
+                                <span class="latex-syntax">\\sum_{i=1}^{n}</span>
+                            </div>
+                            <div class="latex-item" onclick="insertLatex('\\int_{a}^{b}')">
+                                <span>Integral</span>
+                                <span class="latex-syntax">\\int_{a}^{b}</span>
+                            </div>
+                            <div class="latex-item" onclick="insertLatex('\\alpha, \\beta, \\gamma')">
+                                <span>Greek Letters</span>
+                                <span class="latex-syntax">\\alpha, \\beta</span>
+                            </div>
+                            <div class="latex-item" onclick="insertLatex('\\infty')">
+                                <span>Infinity</span>
+                                <span class="latex-syntax">\\infty</span>
+                            </div>
+                            <div class="latex-item" onclick="insertLatex('\\pm')">
+                                <span>Plus-Minus</span>
+                                <span class="latex-syntax">\\pm</span>
+                            </div>
+                            <div class="latex-item" onclick="insertLatex('\\leq, \\geq')">
+                                <span>Inequalities</span>
+                                <span class="latex-syntax">\\leq, \\geq</span>
+                            </div>
+                        </div>
+
+                        <input type="file" id="imageInput" class="hidden-file-input" accept="image/*" onchange="handleImageUpload(event)">
+
+                        <textarea 
+                            class="form-input form-textarea" 
+                            id="emailContent" 
+                            placeholder="Write your message here... (Markdown supported)&#10;&#10;Examples:&#10;**Bold text**&#10;*Italic text*&#10;### Heading&#10;- Bullet item&#10;1. Numbered item&#10;> Quote&#10;`code`&#10;$x^2 + y^2 = z^2$ (inline math)&#10;&#10;$$&#10;E = mc^2&#10;$$ (math block)&#10;&#10;> [!note] This is a note callout&#10;> Content here"
+                            required
+                        ></textarea>
+                        <div class="markdown-help">
+                            💡 Tip: Use Markdown syntax for formatting. Click LaTeX button for common math symbols. Insert images using the Image button.
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-send">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Email
+                        </button>
+                        <button type="button" class="btn btn-export" onclick="openExportWindow()">
+                            <i class="fas fa-file-export"></i>
+                            Export
+                        </button>
+                        <a href="index.html" class="btn btn-visit">
+                            <i class="fas fa-globe"></i>
+                            Visit My Site
+                        </a>
+                        <button type="reset" class="btn btn-clear" onclick="clearForm()">
+                            <i class="fas fa-eraser"></i>
+                            Clear
+                        </button>
+                    </div>
+
+                    <div class="status-message" id="statusMessage"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-eye"></i>
+                    Email Preview
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="preview-content" id="modalPreviewContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('previewModal')">
+                    <i class="fas fa-times"></i>
+                    Close
+                </button>
+                <button class="btn btn-outline" onclick="openExportWindow()">
+                    <i class="fas fa-file-export"></i>
+                    Export
+                </button>
+                <button class="btn btn-primary" onclick="confirmSendEmail()">
+                    <i class="fas fa-paper-plane"></i>
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="exportModal">
+        <div class="export-modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-file-export"></i>
+                    Export Options
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <div class="export-grid">
+                        <!-- HTML Export -->
+                        <div class="export-item">
+                            <div class="export-btn-large" onclick="exportAsHTML()">
+                                <div class="export-icon">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                <div class="export-label">HTML</div>
+                            </div>
+                        </div>
+
+                        <!-- SVG Export -->
+                        <div class="export-item">
+                            <div class="export-btn-large" onclick="exportAsSVG()">
+                                <div class="export-icon">
+                                    <i class="fas fa-file-image"></i>
+                                </div>
+                                <div class="export-label">SVG</div>
+                            </div>
+                            <div class="export-control-group">
+                                <label class="export-control-label">Size</label>
+                                <select id="svgSize" class="export-select">
+                                    <option value="800x600">800×600 px</option>
+                                    <option value="1024x768" selected>1024×768 px</option>
+                                    <option value="1280x720">1280×720 px</option>
+                                    <option value="1920x1080">1920×1080 px</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- PDF Export -->
+                        <div class="export-item">
+                            <div class="export-btn-large" onclick="exportAsPDF()">
+                                <div class="export-icon">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="export-label">PDF</div>
+                            </div>
+                            <div class="export-control-group">
+                                <label class="export-control-label">Page Size</label>
+                                <select id="pdfSize" class="export-select">
+                                    <option value="a4" selected>A4</option>
+                                    <option value="a5">A5</option>
+                                    <option value="letter">Letter</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('exportModal')">
+                    <i class="fas fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div class="confirm-dialog" id="confirmDialog">
+        <div class="confirm-box">
+            <div class="confirm-header">
+                <div class="confirm-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="confirm-message">
+                    Are you finished editing your email?
+                </div>
+            </div>
+            <div class="confirm-buttons">
+                <button class="btn-confirm btn-confirm-no" onclick="closeConfirmDialog()">
+                    <i class="fas fa-times"></i> No, Keep Editing
+                </button>
+                <button class="btn-confirm btn-confirm-yes" onclick="proceedToSend()">
+                    <i class="fas fa-check"></i> Yes, Send It
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="email-icon-wrapper">
+                <div class="email-particles">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
+                <div class="animated-email">
+                    <i class="fas fa-envelope"></i>
+                </div>
+            </div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        const RECIPIENT_EMAIL = 'kadhimshakir@yahoo.com';
+
+        marked.setOptions({
+            breaks: true,
+            gfm: true
+        });
+
+        let currentEmailData = null;
+        let uploadedImages = {};
+
+        function insertMarkdown(before, after) {
+            const textarea = document.getElementById('emailContent');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selectedText = text.substring(start, end);
+            
+            const newText = text.substring(0, start) + before + selectedText + after + text.substring(end);
+            textarea.value = newText;
+            
+            const newCursorPos = start + before.length + selectedText.length;
+            textarea.focus();
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+        }
+
+        function toggleLatexMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('latexMenu');
+            menu.classList.toggle('active');
+            
+            const rect = event.target.getBoundingClientRect();
+            menu.style.position = 'absolute';
+            menu.style.top = rect.bottom + 5 + 'px';
+            menu.style.left = rect.left + 'px';
+        }
+
+        function insertLatex(syntax) {
+            insertMarkdown('$', '$');
+            const textarea = document.getElementById('emailContent');
+            const pos = textarea.selectionStart;
+            const text = textarea.value;
+            textarea.value = text.substring(0, pos - 1) + syntax + text.substring(pos - 1);
+            textarea.focus();
+            document.getElementById('latexMenu').classList.remove('active');
+        }
+
+        function insertImage() {
+            document.getElementById('imageInput').click();
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageData = e.target.result;
+                const imageId = 'img_' + Date.now();
+                uploadedImages[imageId] = imageData;
+                
+                const textarea = document.getElementById('emailContent');
+                const badge = `[IMAGE:${file.name}:${imageId}]`;
+                const start = textarea.selectionStart;
+                const text = textarea.value;
+                textarea.value = text.substring(0, start) + badge + text.substring(start);
+                
+                showStatus('<i class="fas fa-check-circle"></i> Image inserted successfully!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function getContentStyles() {
+            return `
+                <style>
+                    body {
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+                        color: #353b3c;
+                        line-height: 1.6;
+                        max-width: 800px;
+                        margin: 40px auto;
+                        padding: 20px;
+                    }
+                    h1, h2, h3, h4, h5, h6 {
+                        color: #353b3c;
+                        margin-top: 20px;
+                        margin-bottom: 12px;
+                        font-weight: 700;
+                    }
+                    h1 {
+                        font-size: 28px;
+                        border-bottom: 3px solid #846a6a;
+                        padding-bottom: 10px;
+                    }
+                    h2 {
+                        font-size: 24px;
+                        border-bottom: 2px solid #a2999e;
+                        padding-bottom: 8px;
+                    }
+                    h3 {
+                        font-size: 20px;
+                        color: #846a6a;
+                    }
+                    p {
+                        margin-bottom: 14px;
+                        line-height: 1.7;
+                    }
+                    strong {
+                        font-weight: 700;
+                        color: #353b3c;
+                    }
+                    em {
+                        font-style: italic;
+                        color: #846a6a;
+                    }
+                    code {
+                        background: linear-gradient(135deg, rgba(132, 106, 106, 0.08), rgba(162, 153, 158, 0.05));
+                        padding: 3px 8px;
+                        border-radius: 4px;
+                        font-family: 'Courier New', 'Consolas', monospace;
+                        font-size: 13px;
+                        color: #846a6a;
+                        border: 1px solid rgba(132, 106, 106, 0.15);
+                    }
+                    pre {
+                        background: linear-gradient(135deg, rgba(53, 59, 60, 0.05), rgba(132, 106, 106, 0.03));
+                        padding: 16px;
+                        border-radius: 8px;
+                        overflow-x: auto;
+                        margin: 16px 0;
+                        border: 1px solid rgba(198, 199, 196, 0.3);
+                    }
+                    pre code {
+                        background: none;
+                        padding: 0;
+                        border: none;
+                        color: #353b3c;
+                    }
+                    ul, ol {
+                        margin-left: 24px;
+                        margin-bottom: 14px;
+                    }
+                    li {
+                        margin-bottom: 6px;
+                        line-height: 1.6;
+                    }
+                    blockquote {
+                        border-left: 4px solid #846a6a;
+                        padding: 16px 20px 16px 50px;
+                        margin: 16px 0;
+                        background: linear-gradient(90deg, rgba(132, 106, 106, 0.08), rgba(132, 106, 106, 0.02));
+                        border-radius: 8px;
+                        position: relative;
+                    }
+                    blockquote::before {
+                        content: '"';
+                        position: absolute;
+                        top: 8px;
+                        left: 12px;
+                        font-size: 36px;
+                        color: rgba(132, 106, 106, 0.25);
+                        font-family: Georgia, serif;
+                    }
+                    .callout {
+                        padding: 16px 20px;
+                        margin: 16px 0;
+                        border-radius: 8px;
+                        border-left: 4px solid;
+                    }
+                    .callout-note { border-left-color: #3498db; background: linear-gradient(90deg, rgba(52, 152, 219, 0.12), rgba(52, 152, 219, 0.03)); }
+                    .callout-tip { border-left-color: #27ae60; background: linear-gradient(90deg, rgba(39, 174, 96, 0.12), rgba(39, 174, 96, 0.03)); }
+                    .callout-warning { border-left-color: #f39c12; background: linear-gradient(90deg, rgba(243, 156, 18, 0.12), rgba(243, 156, 18, 0.03)); }
+                    .callout-error, .callout-danger { border-left-color: #e74c3c; background: linear-gradient(90deg, rgba(231, 76, 60, 0.12), rgba(231, 76, 60, 0.03)); }
+                    .callout-info { border-left-color: #16a085; background: linear-gradient(90deg, rgba(22, 160, 133, 0.12), rgba(22, 160, 133, 0.03)); }
+                    .callout-success { border-left-color: #2ecc71; background: linear-gradient(90deg, rgba(46, 204, 113, 0.12), rgba(46, 204, 113, 0.03)); }
+                    .math-inline {
+                        background: linear-gradient(135deg, rgba(155, 89, 182, 0.08), rgba(155, 89, 182, 0.03));
+                        padding: 2px 6px;
+                        border-radius: 4px;
+                        font-family: 'Times New Roman', serif;
+                        border: 1px solid rgba(155, 89, 182, 0.15);
+                        color: #8e44ad;
+                        font-style: italic;
+                    }
+                    .math-block {
+                        background: linear-gradient(135deg, rgba(155, 89, 182, 0.08), rgba(155, 89, 182, 0.03));
+                        padding: 16px 20px;
+                        border-radius: 8px;
+                        margin: 16px 0;
+                        font-family: 'Times New Roman', serif;
+                        border: 1px solid rgba(155, 89, 182, 0.2);
+                        text-align: center;
+                        font-size: 16px;
+                        color: #8e44ad;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin: 16px 0;
+                        border: 1px solid #e5e5e5;
+                        border-radius: 8px;
+                        overflow: hidden;
+                    }
+                    th {
+                        background: linear-gradient(135deg, #846a6a, #a2999e);
+                        color: white;
+                        padding: 12px;
+                        text-align: left;
+                        font-weight: 600;
+                    }
+                    td {
+                        padding: 10px 12px;
+                        border-bottom: 1px solid #eef0f2;
+                    }
+                    tr:nth-child(even) {
+                        background: rgba(132, 106, 106, 0.03);
+                    }
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                        border-radius: 8px;
+                        margin: 16px 0;
+                    }
+                    a {
+                        color: #846a6a;
+                        text-decoration: underline;
+                    }
+                    hr {
+                        border: none;
+                        border-top: 2px solid #eef0f2;
+                        margin: 24px 0;
+                    }
+                </style>
+            `;
+        }
+
+        function parseMarkdownWithCallouts(markdown) {
+            // Replace image badges with actual images
+            markdown = markdown.replace(/\[IMAGE:(.*?):(.*?)\]/g, function(match, filename, imageId) {
+                if (uploadedImages[imageId]) {
+                    return `![${filename}](${uploadedImages[imageId]})`;
+                }
+                return match;
+            });
+
+            markdown = markdown.replace(/> \[!(note|tip|warning|error|danger|info|success|abstract|summary|question|help|example|quote)\](.*?)(?:\n>(.|\n)*?)?(?=\n\n|\n$|$)/gim, function(match, type, title, content) {
+                const fullContent = match.replace(/^> /gm, '').replace(/^\[!.*?\]\s*/, '');
+                return `<div class="callout callout-${type.toLowerCase()}">${fullContent}</div>\n`;
+            });
+
+            markdown = markdown.replace(/\$([^\$\n]+?)\$/g, '<span class="math-inline">$1</span>');
+            markdown = markdown.replace(/\$\$([\s\S]+?)\$\$/g, '<div class="math-block">$1</div>');
+
+            let html = marked.parse(markdown);
+            return html;
+        }
+
+        function openPreviewPopup() {
+            const content = document.getElementById('emailContent').value;
+            if (!content.trim()) {
+                showStatus('<i class="fas fa-exclamation-circle"></i> Please write some content first!', 'error');
+                return;
+            }
+            
+            const htmlContent = parseMarkdownWithCallouts(content);
+            document.getElementById('modalPreviewContent').innerHTML = htmlContent;
+            document.getElementById('previewModal').classList.add('active');
+        }
+
+        function openExportWindow() {
+            const content = document.getElementById('emailContent').value;
+            if (!content.trim()) {
+                showStatus('<i class="fas fa-exclamation-circle"></i> Please write some content first!', 'error');
+                return;
+            }
+            document.getElementById('exportModal').classList.add('active');
+        }
+
+        function showStatus(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.innerHTML = message;
+            statusMessage.className = 'status-message ' + type;
+            statusMessage.style.display = 'flex';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        function clearForm() {
+            if (confirm('Are you sure you want to clear the form?')) {
+                document.getElementById('emailSubject').value = '';
+                document.getElementById('emailContent').value = '';
+                uploadedImages = {};
+                showStatus('<i class="fas fa-check-circle"></i> Form cleared successfully!', 'success');
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openConfirmDialog() {
+            document.getElementById('confirmDialog').classList.add('active');
+        }
+
+        function closeConfirmDialog() {
+            document.getElementById('confirmDialog').classList.remove('active');
+        }
+
+        function proceedToSend() {
+            closeConfirmDialog();
+            
+            const subject = document.getElementById('emailSubject').value;
+            const markdownContent = document.getElementById('emailContent').value;
+            const htmlContent = parseMarkdownWithCallouts(markdownContent);
+            
+            currentEmailData = {
+                subject: subject,
+                markdownContent: markdownContent,
+                htmlContent: htmlContent
+            };
+            
+            document.getElementById('modalPreviewContent').innerHTML = htmlContent;
+            document.getElementById('previewModal').classList.add('active');
+        }
+
+        function exportAsHTML() {
+            showLoading();
+            setTimeout(() => {
+                const subject = document.getElementById('emailSubject').value;
+                const content = document.getElementById('emailContent').value;
+                const htmlContent = parseMarkdownWithCallouts(content);
+                
+                const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${subject}</title>
+    ${getContentStyles()}
+</head>
+<body>
+    <h1>${subject}</h1>
+    ${htmlContent}
+</body>
+</html>`;
+
+                const blob = new Blob([fullHTML], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${subject.replace(/[^a-z0-9]/gi, '_')}.html`;
+                a.click();
+                
+                hideLoading();
+                closeModal('exportModal');
+                showStatus('<i class="fas fa-check-circle"></i> HTML file exported successfully!', 'success');
+            }, 1000);
+        }
+
+        function exportAsSVG() {
+            showLoading();
+            setTimeout(() => {
+                const subject = document.getElementById('emailSubject').value;
+                const content = document.getElementById('emailContent').value;
+                const htmlContent = parseMarkdownWithCallouts(content);
+                const sizeOption = document.getElementById('svgSize').value;
+                const [width, height] = sizeOption.split('x').map(Number);
+                
+                const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <foreignObject width="100%" height="100%">
+        <xhtml:div style="padding: 40px; background: white;">
+            <xhtml:style>
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+                    color: #353b3c;
+                    line-height: 1.6;
+                    margin: 0;
+                    padding: 0;
+                }
+                h1, h2, h3, h4, h5, h6 {
+                    color: #353b3c;
+                    margin-top: 20px;
+                    margin-bottom: 12px;
+                    font-weight: 700;
+                }
+                h1 {
+                    font-size: 28px;
+                    border-bottom: 3px solid #846a6a;
+                    padding-bottom: 10px;
+                }
+                h2 {
+                    font-size: 24px;
+                    border-bottom: 2px solid #a2999e;
+                    padding-bottom: 8px;
+                }
+                h3 {
+                    font-size: 20px;
+                    color: #846a6a;
+                }
+                p {
+                    margin-bottom: 14px;
+                    line-height: 1.7;
+                }
+                strong {
+                    font-weight: 700;
+                    color: #353b3c;
+                }
+                em {
+                    font-style: italic;
+                    color: #846a6a;
+                }
+                code {
+                    background: linear-gradient(135deg, rgba(132, 106, 106, 0.08), rgba(162, 153, 158, 0.05));
+                    padding: 3px 8px;
+                    border-radius: 4px;
+                    font-family: 'Courier New', 'Consolas', monospace;
+                    font-size: 13px;
+                    color: #846a6a;
+                    border: 1px solid rgba(132, 106, 106, 0.15);
+                }
+                pre {
+                    background: linear-gradient(135deg, rgba(53, 59, 60, 0.05), rgba(132, 106, 106, 0.03));
+                    padding: 16px;
+                    border-radius: 8px;
+                    overflow-x: auto;
+                    margin: 16px 0;
+                    border: 1px solid rgba(198, 199, 196, 0.3);
+                }
+                pre code {
+                    background: none;
+                    padding: 0;
+                    border: none;
+                    color: #353b3c;
+                }
+                ul, ol {
+                    margin-left: 24px;
+                    margin-bottom: 14px;
+                }
+                li {
+                    margin-bottom: 6px;
+                    line-height: 1.6;
+                }
+                blockquote {
+                    border-left: 4px solid #846a6a;
+                    padding: 16px 20px 16px 50px;
+                    margin: 16px 0;
+                    background: linear-gradient(90deg, rgba(132, 106, 106, 0.08), rgba(132, 106, 106, 0.02));
+                    border-radius: 8px;
+                    position: relative;
+                }
+                blockquote::before {
+                    content: '"';
+                    position: absolute;
+                    top: 8px;
+                    left: 12px;
+                    font-size: 36px;
+                    color: rgba(132, 106, 106, 0.25);
+                    font-family: Georgia, serif;
+                }
+                .callout {
+                    padding: 16px 20px;
+                    margin: 16px 0;
+                    border-radius: 8px;
+                    border-left: 4px solid;
+                }
+                .callout-note { border-left-color: #3498db; background: linear-gradient(90deg, rgba(52, 152, 219, 0.12), rgba(52, 152, 219, 0.03)); }
+                .callout-tip { border-left-color: #27ae60; background: linear-gradient(90deg, rgba(39, 174, 96, 0.12), rgba(39, 174, 96, 0.03)); }
+                .callout-warning { border-left-color: #f39c12; background: linear-gradient(90deg, rgba(243, 156, 18, 0.12), rgba(243, 156, 18, 0.03)); }
+                .callout-error, .callout-danger { border-left-color: #e74c3c; background: linear-gradient(90deg, rgba(231, 76, 60, 0.12), rgba(231, 76, 60, 0.03)); }
+                .callout-info { border-left-color: #16a085; background: linear-gradient(90deg, rgba(22, 160, 133, 0.12), rgba(22, 160, 133, 0.03)); }
+                .callout-success { border-left-color: #2ecc71; background: linear-gradient(90deg, rgba(46, 204, 113, 0.12), rgba(46, 204, 113, 0.03)); }
+                .math-inline {
+                    background: linear-gradient(135deg, rgba(155, 89, 182, 0.08), rgba(155, 89, 182, 0.03));
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    font-family: 'Times New Roman', serif;
+                    border: 1px solid rgba(155, 89, 182, 0.15);
+                    color: #8e44ad;
+                    font-style: italic;
+                }
+                .math-block {
+                    background: linear-gradient(135deg, rgba(155, 89, 182, 0.08), rgba(155, 89, 182, 0.03));
+                    padding: 16px 20px;
+                    border-radius: 8px;
+                    margin: 16px 0;
+                    font-family: 'Times New Roman', serif;
+                    border: 1px solid rgba(155, 89, 182, 0.2);
+                    text-align: center;
+                    font-size: 16px;
+                    color: #8e44ad;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 16px 0;
+                    border: 1px solid #e5e5e5;
+                    border-radius: 8px;
+                    overflow: hidden;
+                }
+                th {
+                    background: linear-gradient(135deg, #846a6a, #a2999e);
+                    color: white;
+                    padding: 12px;
+                    text-align: left;
+                    font-weight: 600;
+                }
+                td {
+                    padding: 10px 12px;
+                    border-bottom: 1px solid #eef0f2;
+                }
+                tr:nth-child(even) {
+                    background: rgba(132, 106, 106, 0.03);
+                }
+                img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 8px;
+                    margin: 16px 0;
+                }
+                a {
+                    color: #846a6a;
+                    text-decoration: underline;
+                }
+            </xhtml:style>
+            <xhtml:h1>${subject}</xhtml:h1>
+            <xhtml:div>${htmlContent}</xhtml:div>
+        </xhtml:div>
+    </foreignObject>
+</svg>`;
+
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${subject.replace(/[^a-z0-9]/gi, '_')}.svg`;
+                a.click();
+                
+                hideLoading();
+                closeModal('exportModal');
+                showStatus('<i class="fas fa-check-circle"></i> SVG file exported successfully!', 'success');
+            }, 1000);
+        }
+
+        function exportAsPDF() {
+            showLoading();
+            setTimeout(async () => {
+                const { jsPDF } = window.jspdf;
+                const subject = document.getElementById('emailSubject').value;
+                const content = document.getElementById('emailContent').value;
+                const htmlContent = parseMarkdownWithCallouts(content);
+                const sizeOption = document.getElementById('pdfSize').value;
+                
+                let format = 'a4';
+                if (sizeOption === 'a5') format = 'a5';
+                if (sizeOption === 'letter') format = 'letter';
+                
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>${getContentStyles()}</head>
+                    <body>
+                        <h1>${subject}</h1>
+                        ${htmlContent}
+                    </body>
+                    </html>
+                `;
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.left = '-9999px';
+                tempDiv.style.width = '800px';
+                tempDiv.style.background = 'white';
+                document.body.appendChild(tempDiv);
+
+                const canvas = await html2canvas(tempDiv, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                });
+
+                document.body.removeChild(tempDiv);
+
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: format
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pdfWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                if (imgHeight <= pdfHeight - 20) {
+                    pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                } else {
+                    let yOffset = 10;
+                    let remainingHeight = imgHeight;
+                    
+                    while (remainingHeight > 0) {
+                        const pageHeight = Math.min(remainingHeight, pdfHeight - 20);
+                        pdf.addImage(imgData, 'PNG', 10, yOffset, imgWidth, imgHeight);
+                        remainingHeight -= (pdfHeight - 20);
+                        
+                        if (remainingHeight > 0) {
+                            pdf.addPage();
+                            yOffset = -(imgHeight - remainingHeight);
+                        }
+                    }
+                }
+
+                pdf.save(`${subject.replace(/[^a-z0-9]/gi, '_')}.pdf`);
+                
+                hideLoading();
+                closeModal('exportModal');
+                showStatus('<i class="fas fa-check-circle"></i> PDF file exported successfully!', 'success');
+            }, 1000);
+        }
+
+        async function confirmSendEmail() {
+            if (!currentEmailData) {
+                const subject = document.getElementById('emailSubject').value;
+                const content = document.getElementById('emailContent').value;
+                const htmlContent = parseMarkdownWithCallouts(content);
+                
+                currentEmailData = {
+                    subject: subject,
+                    markdownContent: content,
+                    htmlContent: htmlContent
+                };
+            }
+
+            showLoading();
+
+            const subject = currentEmailData.subject;
+            const sizeOption = document.getElementById('pdfSize').value;
+            let format = 'a4';
+            if (sizeOption === 'a5') format = 'a5';
+            if (sizeOption === 'letter') format = 'letter';
+
+            try {
+                const { jsPDF } = window.jspdf;
+                
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>${getContentStyles()}</head>
+                    <body>
+                        <h1>${subject}</h1>
+                        ${currentEmailData.htmlContent}
+                    </body>
+                    </html>
+                `;
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.left = '-9999px';
+                tempDiv.style.width = '800px';
+                tempDiv.style.background = 'white';
+                document.body.appendChild(tempDiv);
+                
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: format
+                });
+
+                const canvas = await html2canvas(tempDiv, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                });
+
+                document.body.removeChild(tempDiv);
+
+                const imgData = canvas.toDataURL('image/png');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pdfWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, Math.min(imgHeight, pdfHeight - 20));
+
+                hideLoading();
+                
+                const mailtoLink = `mailto:${RECIPIENT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Please find the attached document. Note: Email clients may not support direct PDF attachments via mailto links. Consider using your email client to attach the downloaded PDF file.')}`;
+                
+                window.location.href = mailtoLink;
+                
+                pdf.save(`${subject.replace(/[^a-z0-9]/gi, '_')}.pdf`);
+                
+                closeModal('previewModal');
+                showStatus('<i class="fas fa-check-circle"></i> Email client opened and PDF downloaded!', 'success');
+                
+                setTimeout(() => {
+                    if (confirm('Would you like to clear the form?')) {
+                        document.getElementById('emailSubject').value = '';
+                        document.getElementById('emailContent').value = '';
+                        uploadedImages = {};
+                        currentEmailData = null;
+                    }
+                }, 2000);
+            } catch (error) {
+                hideLoading();
+                showStatus('<i class="fas fa-exclamation-circle"></i> Error generating PDF: ' + error.message, 'error');
+            }
+        }
+
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            openConfirmDialog();
+        });
+
+        document.getElementById('previewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal('previewModal');
+            }
+        });
+
+        document.getElementById('exportModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal('exportModal');
+            }
+        });
+
+        document.getElementById('confirmDialog').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeConfirmDialog();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            const latexMenu = document.getElementById('latexMenu');
+            if (!latexMenu.contains(e.target) && !e.target.closest('.toolbar-btn')) {
+                latexMenu.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal('previewModal');
+                closeModal('exportModal');
+                closeConfirmDialog();
+                document.getElementById('latexMenu').classList.remove('active');
+            }
+            
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                if (document.getElementById('emailForm').checkValidity()) {
+                    document.getElementById('emailForm').dispatchEvent(new Event('submit'));
+                }
+            }
+
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                openPreviewPopup();
+            }
+        });
+    </script>
+</body>
+</html>
